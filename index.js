@@ -1,4 +1,6 @@
 const http = require('http');
+import dotenv from "dotenv";
+dotenv.config();
 
 // index.js - Simple Node.js HTTP server
 

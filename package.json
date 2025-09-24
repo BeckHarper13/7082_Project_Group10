@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^17.2.2",
     "e.js": "^0.0.2",
     "express": "^4.21.2",
     "firebase": "^12.2.1",
