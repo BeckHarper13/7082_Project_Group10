@@ -1,17 +1,37 @@
 const http = require('http');
-import dotenv from "dotenv";
+const dotenv = require("dotenv");
 dotenv.config();
 
 const path = require('path'); 
 const express = require('express');
 const app = express();
+const db = require('./database');
+const bcrypt = require("bcrypt");
+
 // index.js - Simple Node.js HTTP server
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(express.urlencoded({ extended: true }));
+
+app.use(express.json());
+
 
 const HOST = process.env.HOST || 'localhost';
 const PORT = parseInt(process.env.PORT || '3000', 10);
+
+// Hashing
+const hashPassword = async (plainPassword) => {
+  const saltRounds = 10; // higher = more secure, but slower
+  const hash = await bcrypt.hash(plainPassword, saltRounds);
+  return hash;
+};
+
+// Comparing
+const checkPassword = async (plainPassword, hash) => {
+  return await bcrypt.compare(plainPassword, hash);
+};
+
 
 // const server = http.createServer((req, res) => {
 //     // Basic routing
@@ -30,6 +50,79 @@ app.get('/cars', (req, res) =>{
     res.sendFile(path.join(__dirname, 'public/cars.html')); // serve cars.html
 
 })
+
+app.get('/signup_page', (req, res) =>{
+    res.sendFile(path.join(__dirname, 'public/signup.html')); // serve signup.html
+})
+
+app.get('/login_page', (req, res) =>{
+    res.sendFile(path.join(__dirname, 'public/login.html')); // serve login.html
+})
+
+app.post('/signup', async (req, res) =>{
+  
+  const { username, email, password } = req.body;
+  try{
+    passwordHash = await hashPassword(password);
+  } catch (err) {
+    console.error("Error hashing password", err);
+    return res.status(500).send("Internal server error");
+  }
+
+  // Save user to Firestore
+  async function saveUser() {
+    try {
+      const docRef = await db.collection('users').add({
+        username,
+        email,
+        passwordHash,
+      createdAt: new Date()
+      });
+      console.log('User added with ID: ', docRef.id);
+      res.send('Signup successful!');
+    } catch (e) {
+      console.error('Error adding user: ', e);
+      res.status(500).send('Error signing up');
+    }
+  }
+
+  saveUser();
+
+})
+
+app.post('/login', (req, res) =>{
+  const { email, password } = req.body;
+  
+  // Fetch user from Firestore
+  async function fetchUser(email, password, res) {
+    try {
+      const usersRef = db.collection('users');
+      const snapshot = await usersRef.where('email', '==', email).get();
+      if (snapshot.empty) {
+        console.log('No matching user.');
+        return res.status(400).send('Invalid email or password');
+      }
+
+      let userData;
+      snapshot.forEach(doc => {
+        userData = doc.data();
+      });
+      
+      const passwordMatch = await checkPassword(password, userData.passwordHash);
+      if (passwordMatch) {
+        res.send('Login successful!');
+      } else {
+        res.status(400).send('Invalid email or password');
+      }
+    } catch (e) {
+      console.error('Error fetching user: ', e);
+      res.status(500).send('Error logging in');
+    }
+  }
+
+  fetchUser(email, password, res);
+})
+
 
 // Proxy endpoint for CarQuery
 app.get('/api/makes', async (req, res) => {
