@@ -1,5 +1,6 @@
 const http = require('http');
-import dotenv from "dotenv";
+const dotenv = require('dotenv');
+
 dotenv.config();
 
 const path = require('path'); 

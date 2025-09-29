@@ -1,6 +1,6 @@
 const { initializeApp } = require('firebase/app');
 const { getFirestore } = require('firebase/firestore');
-import dotenv from "dotenv";
+const dotenv = require('dotenv');
 dotenv.config();
 
 // TODO: Replace with your Firebase project configuration
