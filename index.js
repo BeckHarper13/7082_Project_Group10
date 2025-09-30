@@ -7,6 +7,10 @@ const express = require('express');
 const app = express();
 const db = require('./database');
 const bcrypt = require("bcrypt");
+const openai_api = require("openai");
+const openai = new openai_api({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 // index.js - Simple Node.js HTTP server
 
@@ -163,6 +167,23 @@ app.get('/api/trims', async (req, res) => {
   }
 });
 
+app.get('/ai', async (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/html/gpt-test.html'))
+});
+
+app.post('/ai_processor', async (req, res) => {
+    console.log(req.body.prompt);
+    const response = await openai.responses.create({
+        model: "gpt-5-nano",
+        input: req.body.prompt,
+        store: true,
+        // max_output_tokens: 300,
+    });
+    let gpt_output = response.output_text;
+    console.log(response);
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({gpt_response: gpt_output}));
+});
 
 app.listen(PORT, HOST, () => {
     console.log(`Server listening at http://${HOST}:${PORT}`);
