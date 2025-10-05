@@ -63,9 +63,16 @@ app.get('/login_page', (req, res) =>{
     res.sendFile(path.join(__dirname, 'public/login.html')); // serve login.html
 })
 
+
 app.get('/cars/1', (req, res) =>{
   res.sendFile(path.join(__dirname, 'public/html/car-page.html')); // serve car-page.html. Will need to pull data fields from a database or API
 })
+
+app.post('/cars/1/note', (req, res) =>{
+  return res.status(501).send("Not Implemented");
+  ;// Save the note to database for this car ID
+})
+
 
 app.post('/signup', async (req, res) =>{
   

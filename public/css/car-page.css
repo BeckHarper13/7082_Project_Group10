@@ -1,55 +1,44 @@
 body {
     background-color: #f8f9fa;
 }
+
 .car-header {
     background-color: #6c757d;
     color: white;
     padding: 1rem;
     font-size: 1.1rem;
 }
+
 .car-content {
     background-color: white;
     max-width: 500px;
     margin: 0 auto;
     min-height: 100vh;
+    position: relative;
+    padding-bottom: 80px;
 }
-.car-image-placeholder {
+
+.car-image-container {
+    width: 100%;
+    margin: 1.5rem 0;
+}
+
+.car-image {
     width: 100%;
     aspect-ratio: 4/3;
+    object-fit: cover;
     background-color: #f8f9fa;
     border: 2px solid #dee2e6;
     border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    margin: 1.5rem 0;
 }
-.image-icon {
-    width: 80px;
-    height: 80px;
-    border: 3px solid #495057;
-    border-radius: 50%;
-    position: absolute;
-    top: 30px;
-    left: 30px;
-}
-.image-mountain {
-    width: 0;
-    height: 0;
-    border-left: 50px solid transparent;
-    border-right: 50px solid transparent;
-    border-bottom: 60px solid #495057;
-    position: absolute;
-    bottom: 20px;
-    right: 40px;
-}
+
 .vin-label {
     font-size: 0.75rem;
     color: #6c757d;
     text-align: center;
     margin-top: 0.5rem;
 }
+
 .section-icon {
     width: 40px;
     height: 40px;
@@ -60,38 +49,47 @@ body {
     justify-content: center;
     flex-shrink: 0;
 }
+
 .section-title {
     font-weight: 600;
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
 }
+
 .detail-text {
     color: #6c757d;
     font-size: 0.9rem;
     margin-bottom: 0.25rem;
 }
+
 .ask-ai-btn {
-    position: fixed;
-    bottom: 80px;
+    position: absolute;
+    bottom: 100px;
     right: 20px;
     width: 60px;
     height: 60px;
     border-radius: 50%;
     background-color: white;
     border: 2px solid #dee2e6;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    z-index: 1000;
+    z-index: 100;
 }
+
+.ask-ai-btn:hover {
+    background-color: #f8f9fa;
+}
+
 .ask-ai-text {
     font-size: 0.7rem;
     font-weight: 600;
     text-align: center;
     line-height: 1.1;
 }
+
 .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -104,7 +102,9 @@ body {
     padding: 0.75rem;
     max-width: 500px;
     margin: 0 auto;
+    z-index: 200;
 }
+
 .nav-btn {
     flex: 1;
     padding: 0.75rem;
@@ -116,11 +116,28 @@ body {
     margin: 0 0.25rem;
     cursor: pointer;
 }
+
 .nav-btn:hover {
     background-color: #f8f9fa;
 }
+
 @media (min-width: 500px) {
     .car-content {
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
+}
+
+
+/* Notes Modal */
+
+.modal-header {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.modal-footer {
+    border-top: 1px solid #dee2e6;
+}
+
+#notesTextarea {
+    resize: none;
 }

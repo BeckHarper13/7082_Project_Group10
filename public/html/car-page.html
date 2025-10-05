@@ -64,61 +64,103 @@
             </div>
 
             <!-- Engine & Fluids Section -->
-            <div class="d-flex gap-3 mb-5">
+            <div class="d-flex gap-3 mb-4">
                 <div class="section-icon">
                     <i class="bi bi-info" style="font-size: 1.5rem;"></i>
                 </div>
                 <div class="flex-grow-1">
                     <div class="section-title">Engine & Fluids</div>
                     <div class="detail-text">Oil Life: {{ oil_life }}%</div>
-                    <div class="detail-text">Coolant Temp: {{ toolant_temp }}°C</div>
-                    <div class="detail-text">Transmission Fluid: {{ transmission_fluid }}%</div>
-                    <div class="detail-text">Battery Voltage: {{ battery_voltage }}%</div>
+                    <div class="detail-text">Coolant Temp: {{ coolant_temp }}°C</div>
+                    <div class="detail-text">Transmission Fluid: {{ transmission_fluid }}</div>
+                    <div class="detail-text">Battery Voltage: {{ battery_voltage }} V</div>
                 </div>
             </div>
 
-            <!-- Performance & Driving Stats Section -->
-            <div class="d-flex gap-3 mb-5">
+            <!-- Performance / Driving Stats Section -->
+            <div class="d-flex gap-3 mb-4">
                 <div class="section-icon">
                     <i class="bi bi-info" style="font-size: 1.5rem;"></i>
                 </div>
                 <div class="flex-grow-1">
-                    <div class="section-title">Performance & Driving Stats</div>
+                    <div class="section-title">Performance / Driving Stats</div>
                     <div class="detail-text">Odometer: {{ odometer }} km</div>
                     <div class="detail-text">Trip Distance: {{ trip_distance }} km</div>
-                    <div class="detail-text">Average Speed: {{ avrage_speed }} km/h</div>
-                    <div class="detail-text">Top Speed (Trip): {{ top_speed_trip }} km/h</div>
+                    <div class="detail-text">Average Speed: {{ avg_speed }} km/h</div>
+                    <div class="detail-text">Top Speed (Trip): {{ top_speed }} km/h</div>
                 </div>
             </div>
 
             <hr>
 
-            <!-- Notes -->
+            <!-- Notes Section -->
             <div class="d-flex gap-3 mb-5">
                 <div class="section-icon">
-                    <i class="bi bi-info" style="font-size: 1.5rem;"></i>
+                    <i class="bi bi-pencil-square" style="font-size: 1.5rem;"></i>
                 </div>
                 <div class="flex-grow-1">
                     <div class="section-title">Notes</div>
-                    <div class="detail-text">Odometer: {{ odometer }}%</div>
-                    <div class="detail-text">Trip Distance: {{ trip_distance }}°C</div>
-                    <div class="detail-text">Average Speed: {{ avrage_speed }}%</div>
-                    <div class="detail-text">Top Speed (Trip): {{ top_speed_trip }}%</div>
+                    <div class="detail-text" id="notesDisplay">{{ notes }}</div>
                 </div>
             </div>
 
+            <!-- Ask AI Button -->
+            <button class="ask-ai-btn" id="askAiBtn">
+                <div class="ask-ai-text">Ask<br>AI</div>
+            </button>
         </div>
-
-        <!-- Ask AI Button -->
-        <button class="ask-ai-btn" id="askAiBtn">
-            <div class="ask-ai-text">Ask<br>AI</div>
-        </button>
 
         <!-- Bottom Navigation -->
         <div class="bottom-nav">
             <button class="nav-btn" id="backBtn">Back</button>
             <button class="nav-btn" id="deleteBtn">Delete</button>
             <button class="nav-btn" id="editBtn">Edit</button>
+        </div>
+    </div>
+
+    <!-- Edit Notes Modal -->
+    <div class="modal fade" id="editNotesModal" tabindex="-1" aria-labelledby="editNotesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editNotesModalLabel">
+                        <strong>{{ car_name }}</strong><br>
+                        <small class="text-muted">{{ license_plate }}</small>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6 class="mb-3">Edit Note</h6>
+                    <textarea class="form-control" id="notesTextarea" rows="8" placeholder="Enter your notes here...">{{ notes }}</textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Discard Changes</button>
+                    <button type="button" class="btn btn-primary" id="saveNoteBtn">Save Note</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Notes Modal -->
+    <div class="modal fade" id="editNotesModal" tabindex="-1" aria-labelledby="editNotesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editNotesModalLabel">
+                        <strong>{{ car_name }}</strong><br>
+                        <small class="text-muted">{{ license_plate }}</small>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6 class="mb-3">Edit Note</h6>
+                    <textarea class="form-control" id="notesTextarea" rows="8" placeholder="Enter your notes here...">{{ notes }}</textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Discard Changes</button>
+                    <button type="button" class="btn btn-primary" id="saveNoteBtn">Save Note</button>
+                </div>
+            </div>
         </div>
     </div>
 
