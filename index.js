@@ -64,6 +64,11 @@ app.get('/login_page', (req, res) =>{
 })
 
 
+app.get('/account', (req, res) =>{
+  res.sendFile(path.join(__dirname, 'public/html/account.html')); // serve account.html
+})
+
+
 app.get('/cars/1', (req, res) =>{
   res.sendFile(path.join(__dirname, 'public/html/car-page.html')); // serve car-page.html. Will need to pull data fields from a database or API
 })
