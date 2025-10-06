@@ -50,6 +50,10 @@ const checkPassword = async (plainPassword, hash) => {
 //     res.end('Hello from Node.js!\n');
 // });
 
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/html/landing-page.html'))
+})
+
 app.get('/cars', (req, res) =>{
     res.sendFile(path.join(__dirname, 'public/cars.html')); // serve cars.html
 
