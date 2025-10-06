@@ -64,9 +64,21 @@ app.get('/login_page', (req, res) =>{
 })
 
 
+
 app.get('/account', (req, res) =>{
   res.sendFile(path.join(__dirname, 'public/html/account.html')); // serve account.html
 })
+
+app.post('/account/change-email', (req, res) =>{
+  return res.status(501).send("Not Implemented");
+  ;// Update Firebase
+})
+
+app.post('/account/change-password', (req, res) =>{
+  return res.status(501).send("Not Implemented");
+  ;// Update Firebase
+})
+
 
 
 app.get('/cars/1', (req, res) =>{
