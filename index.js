@@ -73,7 +73,7 @@ app.post('/cars/1/note', (req, res) =>{
   ;// Save the note to database for this car ID
 })
 
-app.post('/cars/1/ask-ai', (req, res) =>{
+app.post('/cars/1/ai-chat', (req, res) =>{
   return res.status(501).send("Not Implemented");
   ;// Implement ChatGPT API
 })
