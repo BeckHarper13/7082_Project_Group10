@@ -60,11 +60,11 @@ app.get('/cars', (req, res) =>{
 })
 
 app.get('/signup_page', (req, res) =>{
-    res.sendFile(path.join(__dirname, 'public/signup.html')); // serve signup.html
+    res.sendFile(path.join(__dirname, 'public/html/signup.html')); // serve signup.html
 })
 
 app.get('/login_page', (req, res) =>{
-    res.sendFile(path.join(__dirname, 'public/login.html')); // serve login.html
+    res.sendFile(path.join(__dirname, 'public/html/login.html')); // serve login.html
 })
 
 
