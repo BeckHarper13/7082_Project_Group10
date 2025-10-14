@@ -80,10 +80,10 @@ sendChatBtn.addEventListener('click', async function () {
         let prompt = message
 
         try {
-            const response = await fetch(`/cars/${carId}/ai-chat`, {
+            const response = await fetch("/ai_processor", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: prompt })
+                body: JSON.stringify({ prompt: prompt })
             });
             
             if (!response.ok) {
@@ -92,7 +92,7 @@ sendChatBtn.addEventListener('click', async function () {
             
             const data = await response.json();
             // Add AI response to chat
-            addChatMessage(data.response, 'ai');
+            addChatMessage(data.gpt_response, 'ai');
         } catch (error) {
             console.error('Error sending message:', error);
             addChatMessage(`Sorry, there was an error processing your message: ${error.message}`, 'ai');
