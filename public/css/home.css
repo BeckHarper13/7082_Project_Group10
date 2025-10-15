@@ -1,0 +1,28 @@
+.vehicle-cards-holder {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Centers all cards */
+    gap: 20px; /* Even spacing between cards */
+    margin: 10px 0;
+}
+
+.vehicle-card {
+    width: 20rem;
+}
+
+/* Default (OFF) state */
+.car-start-switch .car-start-input {
+  background-color: #dc3545; /* red */
+  border-color: #dc3545;
+}
+
+/* When checked (ON) */
+.car-start-switch .car-start-input:checked {
+  background-color: #28a745; /* green */
+  border-color: #28a745;
+}
+
+/* Optional: smoother transition */
+.car-start-switch .car-start-input {
+  transition: background-color 0.3s, border-color 0.3s;
+}
