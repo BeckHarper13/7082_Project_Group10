@@ -2,7 +2,7 @@ const http = require('http');
 const dotenv = require("dotenv");
 dotenv.config();
 
-const path = require('path'); 
+const path = require('path');
 const express = require('express');
 const app = express();
 const db = require('./database');
@@ -54,56 +54,56 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/html/landing-page.html'))
 })
 
-app.get('/cars', (req, res) =>{
-    res.sendFile(path.join(__dirname, 'public/cars.html')); // serve cars.html
+app.get('/cars', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/cars.html')); // serve cars.html
 
 })
 
-app.get('/signup_page', (req, res) =>{
-    res.sendFile(path.join(__dirname, 'public/html/signup.html')); // serve signup.html
+app.get('/signup_page', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/html/signup.html')); // serve signup.html
 })
 
-app.get('/login_page', (req, res) =>{
-    res.sendFile(path.join(__dirname, 'public/html/login.html')); // serve login.html
+app.get('/login_page', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/html/login.html')); // serve login.html
 })
 
 
 
-app.get('/account', (req, res) =>{
+app.get('/account', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/html/account.html')); // serve account.html
 })
 
-app.post('/account/change-email', (req, res) =>{
+app.post('/account/change-email', (req, res) => {
   return res.status(501).send("Not Implemented");
   ;// Update Firebase
 })
 
-app.post('/account/change-password', (req, res) =>{
+app.post('/account/change-password', (req, res) => {
   return res.status(501).send("Not Implemented");
   ;// Update Firebase
 })
 
 
 
-app.get('/cars/1', (req, res) =>{
+app.get('/cars/1', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/html/car-page.html')); // serve car-page.html. Will need to pull data fields from a database or API
 })
 
-app.post('/cars/1/note', (req, res) =>{
+app.post('/cars/1/note', (req, res) => {
   return res.status(501).send("Not Implemented");
   ;// Save the note to database for this car ID
 })
 
-app.post('/cars/1/ai-chat', (req, res) =>{
+app.post('/cars/1/ai-chat', (req, res) => {
   return res.status(501).send("Not Implemented");
   ;// Implement ChatGPT API
 })
 
 
-app.post('/signup', async (req, res) =>{
-  
+app.post('/signup', async (req, res) => {
+
   const { username, email, password } = req.body;
-  try{
+  try {
     passwordHash = await hashPassword(password);
   } catch (err) {
     console.error("Error hashing password", err);
@@ -117,7 +117,7 @@ app.post('/signup', async (req, res) =>{
         username,
         email,
         passwordHash,
-      createdAt: new Date()
+        createdAt: new Date()
       });
       console.log('User added with ID: ', docRef.id);
       res.send('Signup successful!');
@@ -131,9 +131,9 @@ app.post('/signup', async (req, res) =>{
 
 })
 
-app.post('/login', (req, res) =>{
+app.post('/login', (req, res) => {
   const { email, password } = req.body;
-  
+
   // Fetch user from Firestore
   async function fetchUser(email, password, res) {
     try {
@@ -145,16 +145,22 @@ app.post('/login', (req, res) =>{
       }
 
       let userData;
+      let userId;
       snapshot.forEach(doc => {
         userData = doc.data();
+        userId = doc.id;
       });
-      
+
       const passwordMatch = await checkPassword(password, userData.passwordHash);
-      if (passwordMatch) {
-        res.send('Login successful!');
-      } else {
-        res.status(400).send('Invalid email or password');
+      if (!passwordMatch) {
+        return res.status(400).send('Invalid email or password');
       }
+
+      //  Successful login
+      return res.json({
+        message: 'Login successful!',
+        userId: userId
+      });
     } catch (e) {
       console.error('Error fetching user: ', e);
       res.status(500).send('Error logging in');
@@ -162,6 +168,8 @@ app.post('/login', (req, res) =>{
   }
 
   fetchUser(email, password, res);
+
+
 })
 
 
@@ -205,25 +213,25 @@ app.get('/api/trims', async (req, res) => {
 });
 
 app.get('/ai', async (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/html/gpt-test.html'))
+  res.sendFile(path.join(__dirname, 'public/html/gpt-test.html'))
 });
 
 app.post('/ai_processor', async (req, res) => {
-    console.log(req.body.prompt);
-    const response = await openai.responses.create({
-        model: "gpt-5-nano",
-        input: req.body.prompt,
-        store: true,
-        // max_output_tokens: 300,
-    });
-    let gpt_output = response.output_text;
-    console.log(response);
-    res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({gpt_response: gpt_output}));
+  console.log(req.body.prompt);
+  const response = await openai.responses.create({
+    model: "gpt-5-nano",
+    input: req.body.prompt,
+    store: true,
+    // max_output_tokens: 300,
+  });
+  let gpt_output = response.output_text;
+  console.log(response);
+  res.writeHead(200, { "Content-Type": "application/json" });
+  res.end(JSON.stringify({ gpt_response: gpt_output }));
 });
 
 app.listen(PORT, HOST, () => {
-    console.log(`Server listening at http://${HOST}:${PORT}`);
+  console.log(`Server listening at http://${HOST}:${PORT}`);
 });
 
 // // Graceful shutdown
