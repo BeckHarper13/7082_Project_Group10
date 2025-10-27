@@ -75,11 +75,40 @@ function showTrimInfo(trimId) {
       <h3>Performance</h3>
       <p><strong>Top Speed:</strong> ${trim.model_top_speed_kph || "N/A"} kph</p>
       <p><strong>0-100 km/h:</strong> ${trim.model_0_to_100_kph || "N/A"} s</p>
+      
+      <button id="saveCarBtn" class="btn btn-success mt-3">Save Car</button>
     </div>
   `;
+
+
+  document.getElementById("saveCarBtn").addEventListener("click", async () => {
+        const userId = localStorage.getItem("userId");
+        if (!userId) {
+            alert("You must be logged in to save a car.");
+            return;
+        }
+
+        try {
+            const res = await fetch("/account/add-car", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userId,
+                    make: document.getElementById("make").value,
+                    model: document.getElementById("model").value,
+                    trimId: trim.model_id
+                })
+            });
+
+            const text = await res.text();
+            alert(text); // Show success or error message
+        } catch (err) {
+            console.error(err);
+            alert("Error saving car. Please try again.");
+        }
+    });
+
 }
-
-
 
 // Event listeners
 document.getElementById("make").addEventListener("change", e => loadModels(e.target.value));

@@ -212,6 +212,45 @@ app.get('/api/trims', async (req, res) => {
   }
 });
 
+
+
+
+app.post('/account/add-car', async (req, res) => {
+    const { userId, make, model, trimId } = req.body;
+
+    if (!userId || !make || !model || !trimId) {
+        return res.status(400).send("Missing required fields");
+    }
+
+    try {
+        const userRef = db.collection('users').doc(userId);
+        const carsRef = userRef.collection('cars');
+        
+        // Check how many cars user already has
+        const snapshot = await carsRef.get();
+        if (snapshot.size >= 3) {
+            return res.status(400).send("You can only save up to 3 cars");
+        }
+
+        // Save the car
+        await carsRef.add({
+            make,
+            model,
+            trimId,
+            createdAt: new Date()
+        });
+
+        res.status(200).send("Car saved successfully");
+    } catch (err) {
+        console.error("Error saving car:", err);
+        res.status(500).send("Error saving car");
+    }
+});
+
+
+
+
+
 app.get('/ai', async (req, res) => {
   res.sendFile(path.join(__dirname, 'public/html/gpt-test.html'))
 });
