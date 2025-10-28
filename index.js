@@ -11,6 +11,22 @@ const openai_api = require("openai");
 const openai = new openai_api({
   apiKey: process.env.OPENAI_API_KEY,
 });
+const session = require('express-session');
+
+
+const fetchsuser = require('./FetchUserInfo');
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'public/html'));
+
+
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'your-secret-key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } // Set to true if using https
+}));
 
 // index.js - Simple Node.js HTTP server
 
@@ -31,10 +47,6 @@ const hashPassword = async (plainPassword) => {
   return hash;
 };
 
-// Comparing
-const checkPassword = async (plainPassword, hash) => {
-  return await bcrypt.compare(plainPassword, hash);
-};
 
 
 // const server = http.createServer((req, res) => {
@@ -70,7 +82,26 @@ app.get('/login_page', (req, res) => {
 
 
 app.get('/account', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/html/account.html')); // serve account.html
+  const userId = req.session.username ? req.session.userId : null;
+  if (!userId) {
+    return res.status(401).send("Unauthorized");
+  }
+
+  console.log('Fetching account for user: ', req.session.username);
+  const username = req.session.username;
+
+  fetchsuser.getUserandCars(username)
+    .then(data => {
+      res.render('account', {
+        username: data.user.username,
+        email_address: data.user.email,
+        cars: data.cars
+      });
+    })
+    .catch(err => {
+      console.error('Error fetching user and cars: ', err);
+      res.status(500).send("Internal Server Error");
+    });
 })
 
 app.post('/account/change-email', (req, res) => {
@@ -110,67 +141,15 @@ app.post('/signup', async (req, res) => {
     return res.status(500).send("Internal server error");
   }
 
-  // Save user to Firestore
-  async function saveUser() {
-    try {
-      const docRef = await db.collection('users').add({
-        username,
-        email,
-        passwordHash,
-        createdAt: new Date()
-      });
-      console.log('User added with ID: ', docRef.id);
-      res.send('Signup successful!');
-    } catch (e) {
-      console.error('Error adding user: ', e);
-      res.status(500).send('Error signing up');
-    }
-  }
-
-  saveUser();
+  fetchsuser.saveUser(req, username, email, passwordHash, res);
 
 })
 
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
-
-  // Fetch user from Firestore
-  async function fetchUser(email, password, res) {
-    try {
-      const usersRef = db.collection('users');
-      const snapshot = await usersRef.where('email', '==', email).get();
-      if (snapshot.empty) {
-        console.log('No matching user.');
-        return res.status(400).send('Invalid email or password');
-      }
-
-      let userData;
-      let userId;
-      snapshot.forEach(doc => {
-        userData = doc.data();
-        userId = doc.id;
-      });
-
-      const passwordMatch = await checkPassword(password, userData.passwordHash);
-      if (!passwordMatch) {
-        return res.status(400).send('Invalid email or password');
-      }
-
-      //  Successful login
-      return res.json({
-        message: 'Login successful!',
-        userId: userId
-      });
-    } catch (e) {
-      console.error('Error fetching user: ', e);
-      res.status(500).send('Error logging in');
-    }
-  }
-
-  fetchUser(email, password, res);
-
-
+  fetchsuser.fetchUser(req, email, password, res);
 })
+
 
 
 // Proxy endpoint for CarQuery

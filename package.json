@@ -13,6 +13,7 @@
     "dotenv": "^17.2.2",
     "e.js": "^0.0.2",
     "express": "^4.21.2",
+    "express-session": "^1.18.2",
     "firebase": "^12.2.1",
     "firebase-admin": "^13.5.0",
     "node": "^24.8.0",
