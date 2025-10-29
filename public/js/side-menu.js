@@ -1,6 +1,6 @@
-const container = document.getElementById("menuRoot");
-ReactDOM.createRoot(container).render(React.createElement(SideMenu));
-
-document.getElementById("logout").addEventListener('click', () => {
-    // call logout post function
+document.getElementById("accountBtn").addEventListener("click", () => {
+    window.location.href = "/account";
+})
+document.getElementById("homeBtn").addEventListener("click", () => {
+    window.location.href = "/home";
 })

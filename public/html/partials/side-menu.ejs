@@ -1,0 +1,33 @@
+<button id="menuBtn" class="btn bi bi-list" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu"
+    aria-controls="offcanvasExample">
+</button>
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="menu" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+        <button class="list-group-item list-group-item-action btn btn-primary bi bi-house-fill" role="button" id="homeBtn"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <br><br><br>
+        <ul class="list-group list-group-flush no-borders">
+            <button class="list-group-item list-group-item-primary btn btn-primary" role="button" id="accountBtn">Account</button>
+        </ul><br><br><br><br><br>
+        <ul class="list-group list-group-flush no-borders">
+            <button class=" list-group-item list-group-item-danger btn btn-outline-danger" id="logoutBtn">Logout</button>
+        </ul>
+    </div>
+</div>
+<style>
+    .offcanvas.offcanvas-start {
+        width: 300px;
+    }
+
+    .bi-house-fill {
+        font-size: 200%;
+    }
+
+    #menuBtn {
+        font-size: 250%;
+    }
+</style>
+<script src="../../js/side-menu.js"></script>

@@ -79,7 +79,9 @@ app.get('/login_page', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/html/login.html')); // serve login.html
 })
 
-
+app.get('/home', (req, res) => {
+  res.render('home');
+})
 
 app.get('/account', (req, res) => {
   const userId = req.session.username ? req.session.userId : null;
@@ -117,7 +119,7 @@ app.post('/account/change-password', (req, res) => {
 
 
 app.get('/cars/1', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/html/car-page.html')); // serve car-page.html. Will need to pull data fields from a database or API
+  res.render("car-page");
 })
 
 app.post('/cars/1/note', (req, res) => {

@@ -16,6 +16,11 @@ header {
     font-size: 1.1rem;
 }
 
+#headerTitle {
+    margin-top: -3.5rem;
+    text-align: center;
+}
+
 main {
     background-color: white;
     max-width: 500px;

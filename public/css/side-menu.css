@@ -1,5 +1,5 @@
 .offcanvas.offcanvas-start {
-    width: 300px; /* default is 400px */
+    width: 300px;
 }
 
 .bi-house-fill {
@@ -8,5 +8,4 @@
 
 #menuBtn {
     font-size:250%;
-    /* margin: 20px; */
 }
