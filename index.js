@@ -80,7 +80,25 @@ app.get('/login_page', (req, res) => {
 })
 
 app.get('/home', (req, res) => {
-  res.render('home');
+  const userId = req.session.username ? req.session.userId : null;
+  if (!userId) {
+    return res.status(401).send("Unauthorized");
+  }
+
+  console.log('Fetching account for user: ', req.session.username);
+  const username = req.session.username;
+
+  fetchsuser.getUserandCars(username)
+    .then(data => {
+      res.render('home', {
+        username: data.user.username,
+        cars: data.cars
+      });
+    })
+    .catch(err => {
+      console.error('Error fetching user and cars: ', err);
+      res.status(500).send("Internal Server Error");
+    });
 })
 
 app.get('/account', (req, res) => {

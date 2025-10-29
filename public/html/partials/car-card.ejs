@@ -1,0 +1,43 @@
+<div class="vehicle-cards-holder">
+    <div class="card vehicle-card">
+        <div class="card-body">
+            <h5 class="card-title" id="carMakeModel"><%= car.make %> <%= car.model %></h5>
+            <div class="info-container">
+                <div>
+                    <span class="bi bi-fuel-pump-fill" id="fuel"> 67%</span>
+                </div>
+                <div>
+                    <img src="../../img/oil.png" alt="Oil" class="img-icon-small">
+                    <span id="oilLevel"> 67%</span>
+                </div>
+                <div>
+                    <img src="../../img/tire-pressure.png" alt="Tire Pressure" class="img-icon-medium">
+                    <span id="tirePressure"> 67%</span>
+                </div>
+                <div>
+                    <img src="../../img/car-battery.png" alt="Car Battery" class="img-icon-medium">
+                    <span id="battery"> 67%</span>
+                </div>
+            </div>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item" id="note">Note: 6 7 </li>
+        </ul>
+    </div>
+</div>
+<style>
+    .img-icon-small {
+        width: 2rem;
+        height: 2rem;
+        vertical-align: middle;
+    }
+    .img-icon-medium {
+        width: 1.2rem;
+        height: 1.2rem;
+        vertical-align: middle;
+    }
+    .info-container {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
