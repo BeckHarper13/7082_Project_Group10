@@ -14,10 +14,17 @@
 <body>
     <main>
         <header id="menu-header">
-            <%- include('partials/side-menu') %>
+            <button id="menuBtn" class="btn bi bi-list" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu"
+                aria-controls="offcanvasExample">
+            </button>
+            <h1>{{ car_name }}</h1>
         </header>
 
-        <!-- Content -->
+        <aside>
+            <%- include('partials/side-menu') %>
+        </aside>
+
+
         <div class="p-3 pb-5">
             <!-- Car Name -->
             <h2 class="text-center mt-3 mb-1">{{ car_name }}</h2>

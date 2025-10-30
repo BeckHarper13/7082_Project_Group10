@@ -13,9 +13,16 @@
 <body>
     <main>
         <header id="menu-header">
-            <%- include('partials/side-menu') %>
-                <h1>Home</h1>
+            <button id="menuBtn" class="btn bi bi-list" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu"
+                aria-controls="offcanvasExample">
+            </button>
+            <h1>Home</h1>
         </header>
+
+        <aside>
+            <%- include('partials/side-menu') %>
+        </aside>
+
         <br><br>
         <h3 style="text-align: center;">Welcome back <%= username %>
         </h3>

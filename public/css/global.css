@@ -31,6 +31,10 @@ header {
     z-index: 1; 
 }
 
+#menuBtn {
+    font-size:250%;
+}
+
 main {
     background-color: white;
     max-width: 500px;
