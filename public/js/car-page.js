@@ -32,7 +32,7 @@ askAiBtn.addEventListener('click', function () {
 
 // Back button
 backBtn.addEventListener('click', function () {
-    window.location.href = `/cars`;
+    window.location.href = `/home`;
 });
 
 // Delete button (WIP)

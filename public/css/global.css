@@ -12,13 +12,23 @@ body {
 header {
     background-color: #6c757d;
     color: white;
-    padding: 1rem;
     font-size: 1.1rem;
+    display: flex;
+    padding: 3px;
+    align-items: center; 
+    position: relative;
 }
 
-#headerTitle {
-    margin-top: -3.5rem;
-    text-align: center;
+#menu-header {
+    justify-content: space-between; 
+}
+
+#menu-header h1 {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    z-index: 1; 
 }
 
 main {

@@ -66,16 +66,15 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/html/landing-page.html'))
 })
 
-app.get('/cars', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/cars.html')); // serve cars.html
-
+app.get('/search', (req, res) => {
+  res.render("search-cars");
 })
 
-app.get('/signup_page', (req, res) => {
+app.get('/signup', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/html/signup.html')); // serve signup.html
 })
 
-app.get('/login_page', (req, res) => {
+app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/html/login.html')); // serve login.html
 })
 
@@ -143,11 +142,6 @@ app.get('/cars/1', (req, res) => {
 app.post('/cars/1/note', (req, res) => {
   return res.status(501).send("Not Implemented");
   ;// Save the note to database for this car ID
-})
-
-app.post('/cars/1/ai-chat', (req, res) => {
-  return res.status(501).send("Not Implemented");
-  ;// Implement ChatGPT API
 })
 
 

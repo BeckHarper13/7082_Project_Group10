@@ -4,6 +4,7 @@
     justify-content: center; /* Centers all cards */
     gap: 20px; /* Even spacing between cards */
     margin: 10px 0;
+    width: 90%
 }
 
 .vehicle-card {
