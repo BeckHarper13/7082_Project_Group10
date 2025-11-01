@@ -67,6 +67,11 @@ app.get('/', (req, res) => {
 })
 
 app.get('/search', (req, res) => {
+  const userId = req.session.username ? req.session.userId : null;
+  if (!userId) {
+    return res.status(401).redirect("/");
+  }
+
   res.render("search-cars");
 })
 
@@ -81,7 +86,7 @@ app.get('/login', (req, res) => {
 app.get('/home', (req, res) => {
   const userId = req.session.username ? req.session.userId : null;
   if (!userId) {
-    return res.status(401).send("Unauthorized");
+    return res.status(401).redirect("/");
   }
 
   console.log('Fetching account for user: ', req.session.username);
@@ -103,7 +108,7 @@ app.get('/home', (req, res) => {
 app.get('/account', (req, res) => {
   const userId = req.session.username ? req.session.userId : null;
   if (!userId) {
-    return res.status(401).send("Unauthorized");
+    return res.status(401).redirect("/");
   }
 
   console.log('Fetching account for user: ', req.session.username);
@@ -136,6 +141,11 @@ app.post('/account/change-password', (req, res) => {
 
 
 app.get('/cars/1', (req, res) => {
+  const userId = req.session.username ? req.session.userId : null;
+  if (!userId) {
+    return res.status(401).redirect("/");
+  }
+
   res.render("car-page");
 })
 
