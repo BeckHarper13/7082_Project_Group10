@@ -140,16 +140,56 @@ app.post('/account/change-password', (req, res) => {
 
 
 
-app.get('/cars/1', (req, res) => {
+app.get('/car/:carId', (req, res) => {
   const userId = req.session.username ? req.session.userId : null;
   if (!userId) {
     return res.status(401).redirect("/");
   }
 
-  res.render("car-page");
-})
+  const carId = req.params.carId; 
 
-app.post('/cars/1/note', (req, res) => {
+  // const carData = db.getCarById(carId); 
+  
+  const carData = {
+    car_id: carId, 
+    
+    car_name: "Mustang EcoBoost Premium 2dr Coupe (2.3L 4cyl Turbo 6M) (2017)",
+    license_plate: "SGT-2025",
+    car_image_url: "https://www.ford.ca/cmslibs/content/dam/na/ford/en_ca/images/mustang/2026/jellybeans/26_frd_mst_eb_ps34_rcrd.png", 
+    vin: "1HGCM3B19GA000000",
+    make: "Ford",
+    model: "Mustang",
+    manufacture_year: 2025,
+    
+    fuel_fill: 85,
+    fuel_type: "Premium Unleaded",
+    fuel_efficiency: 12.4, 
+    tire_fl_pressure: 34,
+    tire_fr_pressure: 34,
+    tire_rl_pressure: 36,
+    tire_rr_pressure: 36,
+    tire_tread_depth: 7.2, 
+    oil_life: 68,
+    coolant_temp: 92, 
+    transmission_fluid: "OK",
+    battery_voltage: 12.6, 
+    odometer: 14520, 
+    trip_distance: 285.5, 
+    avg_speed: 62, 
+    top_speed: 185, 
+    notes: "Next service due at 20,000km."
+  };
+
+  res.render("car-page", carData);
+});
+
+app.get('/car/:carId/note', (req, res) => {
+  const userId = req.session.username ? req.session.userId : null;
+  if (!userId) {
+    return res.status(401).send("Unauthorized");
+  }
+
+  const carId = req.params.carId; 
   return res.status(501).send("Not Implemented");
   ;// Save the note to database for this car ID
 })

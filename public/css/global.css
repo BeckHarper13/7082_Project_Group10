@@ -24,9 +24,10 @@ header {
 }
 
 #menu-header h1 {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    position: static;
+    left: auto;
+    transform: none;
+    text-align: center;
     margin: 0;
     z-index: 1; 
 }
