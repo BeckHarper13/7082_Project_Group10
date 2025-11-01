@@ -1,54 +1,91 @@
 
 let trimsCache = []; // store trims so we can populate dropdown
 
-
+const makeSelect = document.getElementById("make");
+const modelSelect = document.getElementById("model");
+const trimSelect = document.getElementById("trim");
+const getInfoBtn = document.getElementById("getInfo");
 
 async function loadMakes() {
-  const res = await fetch('/api/makes'); // call your proxy
+  const res = await fetch('/api/makes');
   const text = await res.text();
-  const json = JSON.parse(text.replace("var makes = ", "").replace(";", ""));
-  const makeSelect = document.getElementById("make");
+  try {
+    const json = JSON.parse(text.replace("var makes = ", "").replace(";", ""));
+    makeSelect.innerHTML = '<option value="">Select a Make</option>'; // Add default option
+    
+    json.Makes.forEach(m => {
+      let opt = document.createElement("option");
+      opt.value = m.make_id;
+      opt.textContent = m.make_display;
+      makeSelect.appendChild(opt);
+    });
 
-  json.Makes.forEach(m => {
-    let opt = document.createElement("option");
-    opt.value = m.make_id;
-    opt.textContent = m.make_display;
-    makeSelect.appendChild(opt);
-  });
+  } catch (error) {
+    console.error("Failed to parse makes data:", error);
+    makeSelect.innerHTML = '<option value="">Error loading makes</option>';
+  }
 }
 
 // Load models when a make is selected
-async function loadModels(make) {
-  const res = await fetch(`/api/models?make=${make}`);
-  const text = await res.text();
-  const json = JSON.parse(text.replace("var models = ", "").replace(";", ""));
-  const modelSelect = document.getElementById("model");
-  modelSelect.innerHTML = "";
+async function loadModels(makeId) { 
+  modelSelect.disabled = true;
+  modelSelect.innerHTML = '<option value="">Loading Models...</option>';
+  trimSelect.disabled = true;
+  getInfoBtn.disabled = true;
 
-  json.Models.forEach(m => {
-    let opt = document.createElement("option");
-    opt.value = m.model_name;
-    opt.textContent = m.model_name;
-    modelSelect.appendChild(opt);
-  });
+  const res = await fetch(`/api/models?make=${makeId}`);
+  const text = await res.text();
+  
+  try {
+    const json = JSON.parse(text.replace("var models = ", "").replace(";", ""));
+    modelSelect.innerHTML = '<option value="">Select a Model</option>'; // Default option
+    
+    json.Models.forEach(m => {
+      let opt = document.createElement("option");
+      opt.value = m.model_name; 
+      opt.textContent = m.model_name;
+      modelSelect.appendChild(opt);
+    });
+    
+    modelSelect.disabled = false;
+
+  } catch (error) {
+    console.error("Failed to parse models data:", error);
+    modelSelect.innerHTML = '<option value="">Error loading models</option>';
+  }
 }
 
 //Load trim options for the make and model
-async function loadTrims(make, model) {
-  const res = await fetch(`/api/trims?make=${make}&model=${model}`);
+async function loadTrims(makeId, modelName) {
+  trimSelect.disabled = true;
+  trimSelect.innerHTML = '<option value="">Loading Trims...</option>';
+  getInfoBtn.disabled = true;
+
+  const res = await fetch(`/api/trims?make=${makeId}&model=${modelName}`);
   const text = await res.text();
-  const json = JSON.parse(text.replace("var trims = ", "").replace(";", ""));
-  trimsCache = json.Trims;
+  
+  try {
+    const json = JSON.parse(text.replace("var trims = ", "").replace(";", ""));
+    trimsCache = json.Trims;
 
-  const trimSelect = document.getElementById("trim");
-  trimSelect.innerHTML = "";
+    trimSelect.innerHTML = '<option value="">Select a Trim</option>'; // Default option
 
-  trimsCache.forEach(trim => {
-    let opt = document.createElement("option");
-    opt.value = trim.model_id; // unique identifier
-    opt.textContent = trim.model_trim || trim.model_name;
-    trimSelect.appendChild(opt);
-  });
+    trimsCache.forEach(trim => {
+      let opt = document.createElement("option");
+      opt.value = trim.model_id; // unique identifier
+      opt.textContent = `${trim.model_year} - ${trim.model_trim || trim.model_name}`;
+      trimSelect.appendChild(opt);
+    });
+    
+    trimSelect.disabled = false;
+    if (trimsCache.length > 0) {
+        getInfoBtn.disabled = false;
+    }
+    
+  } catch (error) {
+    console.error("Failed to parse trims data:", error);
+    trimSelect.innerHTML = '<option value="">Error loading trims</option>';
+  }
 }
 
 function showTrimInfo(trimId) {
@@ -57,27 +94,86 @@ function showTrimInfo(trimId) {
 
   const output = document.getElementById("output");
   output.innerHTML = `
-    <div class="trim-info">
-      <h2>${trim.model_name} ${trim.model_trim || ""} (${trim.model_year})</h2>
-      
-      <h3>Engine & Power</h3>
-      <p><strong>Engine:</strong> ${trim.model_engine_cc || "N/A"} cc, ${trim.model_engine_cyl || "N/A"} cylinders, ${trim.model_engine_type || "N/A"}</p>
-      <p><strong>Power:</strong> ${trim.model_engine_power_ps || "N/A"} PS / ${trim.model_engine_power_hp || "N/A"} HP</p>
-      <p><strong>Torque:</strong> ${trim.model_engine_torque_nm || "N/A"} Nm / ${trim.model_engine_torque_lbft || "N/A"} lb-ft</p>
-      
-      <h3>Transmission & Drivetrain</h3>
-      <p><strong>Transmission:</strong> ${trim.model_transmission_type || "N/A"}, ${trim.model_drive || "N/A"}</p>
-      
-      <h3>Fuel & Economy</h3>
-      <p><strong>Fuel Type:</strong> ${trim.model_engine_fuel || "N/A"}</p>
-      <p><strong>Fuel Consumption:</strong> City: ${trim.model_lkm_city || "N/A"} L/100km, Highway: ${trim.model_lkm_hwy || "N/A"} L/100km, Combined: ${trim.model_lkm_mixed || "N/A"} L/100km</p>
-      
-      <h3>Performance</h3>
-      <p><strong>Top Speed:</strong> ${trim.model_top_speed_kph || "N/A"} kph</p>
-      <p><strong>0-100 km/h:</strong> ${trim.model_0_to_100_kph || "N/A"} s</p>
-      
-      <button id="saveCarBtn" class="btn btn-success mt-3">Save Car</button>
-    </div>
+      <div class="trim-info mb-5">
+        <h2 class="text-center mb-4 fw-bold">
+          ${trim.model_name} ${trim.model_trim || ""} (${trim.model_year})
+        </h2>
+        
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-3">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="bi bi-gear-fill text-primary fs-4 me-3"></i>
+                    <h3 class="section-title mb-0 fw-bold">Engine & Power</h3>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between">
+                        <strong>Engine Specs:</strong>
+                        <span>${trim.model_engine_cc || "N/A"} cc, ${trim.model_engine_cyl || "N/A"} cyl, ${trim.model_engine_type || "N/A"}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <strong>Horsepower:</strong>
+                        <span class="fw-bold">${trim.model_engine_power_hp || "N/A"} HP</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <strong>Torque:</strong>
+                        <span>${trim.model_engine_torque_nm || "N/A"} Nm</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-3">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="bi bi-fuel-pump-fill text-primary fs-4 me-3"></i>
+                    <h3 class="section-title mb-0 fw-bold">Fuel & Drivetrain</h3>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between">
+                        <strong>Fuel Type:</strong>
+                        <span>${trim.model_engine_fuel || "N/A"}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <strong>Transmission:</strong>
+                        <span>${trim.model_transmission_type || "N/A"}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <strong>Drive:</strong>
+                        <span>${trim.model_drive || "N/A"}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-3">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="bi bi-speedometer2 text-primary fs-4 me-3"></i>
+                    <h3 class="section-title mb-0 fw-bold">Performance</h3>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between">
+                        <strong>Top Speed:</strong>
+                        <span class="fw-bold">${trim.model_top_speed_kph || "N/A"} kph</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <strong>0-100 km/h:</strong>
+                        <span class="fw-bold">${trim.model_0_to_100_kph || "N/A"} s</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <strong>Consumption (Combined):</strong>
+                        <span>${trim.model_lkm_mixed || "N/A"} L/100km</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="d-grid gap-2">
+          <button id="saveCarBtn" class="btn btn-success btn-lg mt-3">
+            <i class="bi bi-stars me-2"></i> Register This Car
+          </button>
+        </div>
+      </div>
   `;
 
 
@@ -110,15 +206,44 @@ function showTrimInfo(trimId) {
 
 }
 
-// Event listeners
-document.getElementById("make").addEventListener("change", e => loadModels(e.target.value));
-document.getElementById("model").addEventListener("change", e => {
-  const make = document.getElementById("make").value;
-  loadTrims(make, e.target.value);
+// --- Event Listeners ---
+
+makeSelect.addEventListener("change", e => {
+    const makeId = e.target.value;
+    if (makeId) {
+        loadModels(makeId);
+    } else {
+        // Reset models and trims if make is unselected
+        modelSelect.disabled = true;
+        modelSelect.innerHTML = '<option value="">Select a Make first</option>';
+        trimSelect.disabled = true;
+        trimSelect.innerHTML = '<option value="">Select a Model first</option>';
+        getInfoBtn.disabled = true;
+    }
 });
-document.getElementById("getInfo").addEventListener("click", () => {
-  const trimId = document.getElementById("trim").value;
-  showTrimInfo(trimId);
+
+modelSelect.addEventListener("change", e => {
+    const makeId = makeSelect.value;
+    const modelName = e.target.value;
+    if (makeId && modelName) {
+        loadTrims(makeId, modelName);
+    } else {
+        // Reset trims if model is unselected
+        trimSelect.disabled = true;
+        trimSelect.innerHTML = '<option value="">Select a Model first</option>';
+        getInfoBtn.disabled = true;
+    }
+});
+
+trimSelect.addEventListener("change", e => {
+    getInfoBtn.disabled = !e.target.value;
+});
+
+getInfoBtn.addEventListener("click", () => {
+  const trimId = trimSelect.value;
+  if (trimId) {
+    showTrimInfo(trimId);
+  }
 });
 
 // Initialize
