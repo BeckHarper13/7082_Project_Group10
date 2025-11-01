@@ -1,44 +1,61 @@
-<div class="vehicle-cards-holder">
-    <div class="card vehicle-card">
-        <div class="card-body">
-            <h5 class="card-title" id="carMakeModel"><%= car.make %> <%= car.model %></h5>
-            <div class="info-container">
-                <div>
-                    <span class="bi bi-fuel-pump-fill" id="fuel"> 67%</span>
+<a href="/car/<%= car.id %>" class="text-decoration-none text-dark">
+    <div class="card shadow-sm mb-4 border-0 rounded-3">
+        <div class="card-body pb-2">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="card-title mb-0 fw-bold">
+                    <%= car.make %> <%= car.model %>
+                </h5>
+                <i class="bi bi-chevron-right text-primary fs-5"></i>
+            </div>
+            
+            <% if (car.year) { %>
+                <p class="text-muted small mb-3"><%= car.year %></p>
+            <% } %>
+
+            <div class="row row-cols-2 g-3 info-grid">
+                
+                <div class="col d-flex align-items-center">
+                    <i class="bi bi-fuel-pump-fill fs-4 me-2"></i>
+                    <div>
+                        <small class="text-muted d-block">Fuel</small>
+                        <span class="fw-bold" id="fuel"><%= car.fuelFill %>%</span>
+                    </div>
                 </div>
-                <div>
-                    <img src="../../img/oil.png" alt="Oil" class="img-icon-small">
-                    <span id="oilLevel"> 67%</span>
+
+                <div class="col d-flex align-items-center">
+                    <i class="bi bi-tools fs-4 me-2"></i>
+                    <div>
+                        <small class="text-muted d-block">Oil Life</small>
+                        <span class="fw-bold" id="oilLevel"><%= car.oilLevel %>%</span>
+                    </div>
                 </div>
-                <div>
-                    <img src="../../img/tire-pressure.png" alt="Tire Pressure" class="img-icon-medium">
-                    <span id="tirePressure"> 67%</span>
+
+                <div class="col d-flex align-items-center">
+                    <i class="bi bi-speedometer2 fs-4 me-2"></i>
+                    <div>
+                        <small class="text-muted d-block">Tires</small>
+                        <span class="fw-bold" id="tirePressure"><%= car.tirePressure %> PSI</span>
+                    </div>
                 </div>
-                <div>
-                    <img src="../../img/car-battery.png" alt="Car Battery" class="img-icon-medium">
-                    <span id="battery"> 67%</span>
+                
+                <div class="col d-flex align-items-center">
+                    <i class="bi bi-battery-half fs-4 me-2"></i>
+                    <div>
+                        <small class="text-muted d-block">Battery</small>
+                        <span class="fw-bold" id="battery"><%= car.batteryVoltage %> V</span>
+                    </div>
                 </div>
             </div>
         </div>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item" id="note">Note: 6 7 </li>
+        
+        <% if (car.note) { %>
+        <ul class="list-group list-group-flush border-top">
+            <li class="list-group-item bg-light border-0 py-2">
+                <i class="bi bi-pencil-square me-2 text-secondary"></i>
+                <small class="text-muted">Note: </small>
+                <small id="note"><%= car.note %></small>
+            </li>
         </ul>
+        <% } %>
     </div>
-</div>
-<style>
-    .img-icon-small {
-        width: 2rem;
-        height: 2rem;
-        vertical-align: middle;
-    }
-    .img-icon-medium {
-        width: 1.2rem;
-        height: 1.2rem;
-        vertical-align: middle;
-    }
-    .info-container {
-        width: 90%;
-        display: flex;
-        justify-content: space-between;
-    }
-</style>
+</a>
