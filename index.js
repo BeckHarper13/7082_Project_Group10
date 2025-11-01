@@ -150,9 +150,9 @@ app.get('/car/:carId', (req, res) => {
 
   // const carData = db.getCarById(carId); 
   
+  // Sample data
   const carData = {
     car_id: carId, 
-    
     car_name: "Mustang EcoBoost Premium 2dr Coupe (2.3L 4cyl Turbo 6M) (2017)",
     license_plate: "SGT-2025",
     car_image_url: "https://www.ford.ca/cmslibs/content/dam/na/ford/en_ca/images/mustang/2026/jellybeans/26_frd_mst_eb_ps34_rcrd.png", 
@@ -160,7 +160,6 @@ app.get('/car/:carId', (req, res) => {
     make: "Ford",
     model: "Mustang",
     manufacture_year: 2025,
-    
     fuel_fill: 85,
     fuel_type: "Premium Unleaded",
     fuel_efficiency: 12.4, 
