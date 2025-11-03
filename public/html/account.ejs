@@ -53,48 +53,47 @@
         <section class="your-cars container mb-5">
             <h2 class="mb-4 text-center">Your Cars</h2>
 
-            <% if (cars && cars.length> 0) { %>
-                <div class="list-group">
-                    <% cars.forEach(car=> { %>
-                        <a href="/car/<%= car.id %>"
-                            class="list-group-item list-group-item-action border-start-0 border-end-0 border-top-0 py-3">
-                            <div class="d-flex w-100 justify-content-between align-items-center">
-                                <div>
-                                    <h5 class="mb-0 fw-bold text-dark">
-                                        <%= car.make %>
-                                            <%= car.model %>
-                                    </h5>
-                                    <% if (car.year) { %>
-                                        <small class="text-muted">
-                                            <%= car.year %>
-                                        </small>
-                                        <% } %>
-                                </div>
-                                <i class="bi bi-chevron-right text-primary fs-5"></i>
-                            </div>
-                            <% if (car.color) { %>
-                                <small class="d-block mt-1 text-secondary">
-                                    <i class="bi bi-palette-fill me-1"></i>
-                                    <%= car.color %>
-                                </small>
-                                <% } %>
-                        </a>
-                        <% }) %>
-
-                            <a href="/search"
-                                class="list-group-item list-group-item-action text-center py-3 border-start-0 border-end-0 border-bottom-0 text-primary">
-                                <i class="bi bi-plus-circle-fill me-2"></i> Add New Car
-                            </a>
-                </div>
-                <% } else { %>
-                    <div class="text-center p-4 bg-light rounded shadow-sm">
-                        <i class="bi bi-car-front-fill display-5 text-muted mb-3"></i>
-                        <p class="text-muted mb-3">You haven't added any cars yet. Let's get started!</p>
-                        <a href="/search" class="btn btn-primary">
-                            <i class="bi bi-plus me-2"></i> Add Your First Car
-                        </a>
+            <% if (cars && cars.length > 0) { %>
+            <div class="d-flex flex-column gap-3">
+                <% cars.forEach(car => { %>
+                <div class="card">
+                    <a href="/car/<%= encodeURIComponent(car.make) %>/<%= encodeURIComponent(car.model) %>" class="stretched-link text-decoration-none text-dark"></a>
+                    <div class="card-body d-flex w-100 justify-content-between align-items-center py-3">
+                        <div>
+                        <h5 class="mb-0 fw-bold">
+                            <%= car.make %> <%= car.model %>
+                        </h5>
+                        <% if (car.year) { %>
+                            <small class="text-muted d-block">
+                            <%= car.year %>
+                            </small>
+                        <% } %>
+                        <% if (car.color) { %>
+                            <small class="d-block mt-1 text-secondary">
+                            <i class="bi bi-palette-fill me-1"></i>
+                            <%= car.color %>
+                            </small>
+                        <% } %>
+                        </div>
+                        <i class="bi bi-chevron-right text-primary fs-5"></i>
                     </div>
-                    <% } %>
+                    </a>
+                </div>
+                <% }) %>
+
+                <a href="/search" class="btn btn-outline-primary w-100">
+                <i class="bi bi-plus-circle-fill me-2"></i> Add New Car
+                </a>
+            </div>
+            <% } else { %>
+            <div class="text-center p-4 bg-light rounded shadow-sm">
+                <i class="bi bi-car-front-fill display-5 text-muted mb-3"></i>
+                <p class="text-muted mb-3">You haven't added any cars yet. Let's get started!</p>
+                <a href="/search" class="btn btn-primary">
+                <i class="bi bi-plus me-2"></i> Add Your First Car
+                </a>
+            </div>
+            <% } %>
         </section>
     </main>
 

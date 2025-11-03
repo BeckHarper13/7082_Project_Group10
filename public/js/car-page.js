@@ -2,7 +2,7 @@
 //document.addEventListener('DOMContentLoaded', function () {
 
 // Get the car ID from the URL
-const carId = window.location.pathname.split('/')[2];
+// const carId = window.location.pathname.split('/')[2];
 
 // Initialize Bootstrap modal
 const editNotesModal = new bootstrap.Modal(document.getElementById('editNotesModal'));

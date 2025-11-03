@@ -136,51 +136,44 @@ app.post('/account/change-email', (req, res) => {
 app.post('/account/change-password', (req, res) => {
   return res.status(501).send("Not Implemented");
   ;// Update Firebase
-})
+});
 
-
-
-app.get('/car/:carId', (req, res) => {
+app.get('/car/:make/:model', async (req, res) => {
   const userId = req.session.username ? req.session.userId : null;
-  if (!userId) {
-    return res.status(401).redirect("/");
+  if (!userId) return res.status(401).redirect("/");
+
+  const { make, model } = req.params;
+
+  try {
+  // Step 1: Get all trims for that make/model
+  const trimsUrl = `https://www.carqueryapi.com/api/0.3/?cmd=getTrims&make=${make}&model=${model}`;
+  const trimsRes = await fetch(trimsUrl);
+  const trimsText = await trimsRes.text();
+  const trimsData = JSON.parse(trimsText.replace(/^\?\(|\);?$/g, ""));
+  const trims = trimsData.Trims || [];
+
+  if (trims.length === 0) {
+    return res.render("car-page", { make, model, carData: null });
   }
 
-  const carId = req.params.carId; 
+  // Step 2: Pick the newest year trim
+  const latestTrim = trims.reduce((a, b) => (a.model_year > b.model_year ? a : b));
 
-  // const carData = db.getCarById(carId); 
-  
-  // Sample data
-  const carData = {
-    car_id: carId, 
-    car_name: "Mustang EcoBoost Premium 2dr Coupe (2.3L 4cyl Turbo 6M) (2017)",
-    license_plate: "SGT-2025",
-    car_image_url: "https://www.ford.ca/cmslibs/content/dam/na/ford/en_ca/images/mustang/2026/jellybeans/26_frd_mst_eb_ps34_rcrd.png", 
-    vin: "1HGCM3B19GA000000",
-    make: "Ford",
-    model: "Mustang",
-    manufacture_year: 2025,
-    fuel_fill: 85,
-    fuel_type: "Premium Unleaded",
-    fuel_efficiency: 12.4, 
-    tire_fl_pressure: 34,
-    tire_fr_pressure: 34,
-    tire_rl_pressure: 36,
-    tire_rr_pressure: 36,
-    tire_tread_depth: 7.2, 
-    oil_life: 68,
-    coolant_temp: 92, 
-    transmission_fluid: "OK",
-    battery_voltage: 12.6, 
-    odometer: 14520, 
-    trip_distance: 285.5, 
-    avg_speed: 62, 
-    top_speed: 185, 
-    notes: "Next service due at 20,000km."
-  };
+  // Step 3: Fetch detailed data using model_id
+  const modelUrl = `https://www.carqueryapi.com/api/0.3/?cmd=getModel&model=${latestTrim.model_id}`;
+  const modelRes = await fetch(modelUrl);
+  const modelText = await modelRes.text();
+  const modelData = JSON.parse(modelText.replace(/^\?\(|\);?$/g, ""));
+  const car = modelData[0];
 
-  res.render("car-page", carData);
+  // Step 4: Render EJS page
+  res.render("car-page", { make, model, carData: car });
+} catch (err) {
+  console.error(err);
+  res.status(500).send("Failed to load car data.");
+}
 });
+
 
 app.get('/car/:carId/note', (req, res) => {
   const userId = req.session.username ? req.session.userId : null;
