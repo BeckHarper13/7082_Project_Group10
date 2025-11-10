@@ -6,6 +6,14 @@ const modelSelect = document.getElementById("model");
 const trimSelect = document.getElementById("trim");
 const getInfoBtn = document.getElementById("getInfo");
 
+const wizardModalEl = document.getElementById('registrationWizardModal');
+const wizardModal = new bootstrap.Modal(wizardModalEl);
+const wizardLabel = document.getElementById('wizardModalLabel');
+const wizardBody = document.getElementById('wizardModalBody');
+const wizardFooter = document.getElementById('wizardModalFooter');
+const wizardCloseBtn = document.getElementById('wizardCloseBtn');
+let activeTrimData = null; // To store the trim data when wizard starts
+
 async function loadMakes() {
   const res = await fetch('/api/makes');
   const text = await res.text();
@@ -177,33 +185,20 @@ function showTrimInfo(trimId) {
   `;
 
 
-  document.getElementById("saveCarBtn").addEventListener("click", async () => {
+document.getElementById("saveCarBtn").addEventListener("click", () => {
         const userId = localStorage.getItem("userId");
         if (!userId) {
-            alert("You must be logged in to save a car.");
+            alert("You must be logged in to register a car.");
             return;
         }
-
-        try {
-            const res = await fetch("/account/add-car", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    userId,
-                    make: document.getElementById("make").value,
-                    model: document.getElementById("model").value,
-                    trimId: trim.model_id
-                })
-            });
-
-            const text = await res.text();
-            alert(text); // Show success or error message
-        } catch (err) {
-            console.error(err);
-            alert("Error saving car. Please try again.");
-        }
+        
+        // Save the trim data for the wizard to use
+        activeTrimData = trim; 
+        
+        // Start the wizard at step 1
+        showWizardStep1();
+        wizardModal.show();
     });
-
 }
 
 // --- Event Listeners ---
@@ -245,6 +240,155 @@ getInfoBtn.addEventListener("click", () => {
     showTrimInfo(trimId);
   }
 });
+
+// WIZARD
+
+function showWizardStep1() {
+    wizardLabel.textContent = "Car Registration Wizard (Step 1/3)";
+    wizardCloseBtn.style.display = "block"; // Show close button
+    wizardBody.innerHTML = `
+        <div class="wizard-step-body">
+            <i class="bi bi-usb-drive"></i>
+            <h5>Enter your SpecCheck Connector serial number</h5>
+            <div class="form-floating mt-3 w-100">
+                <input type="text" class="form-control" id="serialNumberInput" placeholder="SN-XXXXXX">
+                <label for="serialNumberInput">Serial Number</label>
+            </div>
+            <div id="step1-error" class="text-danger mt-2 d-none">Please enter a serial number.</div>
+        </div>
+    `;
+    wizardFooter.innerHTML = `
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="wizardStep1Next">Next</button>
+    `;
+
+    document.getElementById("wizardStep1Next").addEventListener("click", () => {
+        const serialInput = document.getElementById("serialNumberInput");
+        const errorEl = document.getElementById("step1-error");
+        if (serialInput.value.trim() === "") {
+            errorEl.classList.remove("d-none");
+            serialInput.classList.add("is-invalid");
+        } else {
+            errorEl.classList.add("d-none");
+            serialInput.classList.remove("is-invalid");
+            showWizardStep2();
+        }
+    });
+}
+
+function showWizardStep2() {
+    wizardLabel.textContent = "Car Registration Wizard (Step 2/3)";
+    wizardCloseBtn.style.display = "block"; // Show close button
+    wizardBody.innerHTML = `
+        <div class="wizard-step-body">
+            <i class="bi bi-car-front"></i>
+            <h5>Plug the SpecCheck Connector into your car</h5>
+            <p class="text-muted">Once connected, press 'Next' to begin registration.</p>
+        </div>
+    `;
+    wizardFooter.innerHTML = `
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="wizardStep2Next">Next</button>
+    `;
+
+    document.getElementById("wizardStep2Next").addEventListener("click", () => {
+        showWizardStep3_Registering();
+    });
+}
+
+function showWizardStep3_Registering() {
+    wizardLabel.textContent = "Car Registration Wizard (Step 3/3)";
+    wizardCloseBtn.style.display = "none"; // Hide close button during "critical" step
+    wizardBody.innerHTML = `
+        <div class="wizard-step-body">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <h5>Registering Car...</h5>
+            <p class="text-muted">Please wait, this may take a moment.</p>
+        </div>
+    `;
+    wizardFooter.innerHTML = `
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" disabled>Cancel</button>
+    `;
+
+    // --- THIS IS YOUR ORIGINAL FETCH LOGIC ---
+    // We use a 2-second timeout to simulate the loading spinner
+    
+    setTimeout(async () => {
+        const userId = localStorage.getItem("userId");
+        
+        try {
+            const res = await fetch("/account/add-car", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userId,
+                    make: document.getElementById("make").value,
+                    model: document.getElementById("model").value,
+                    trimId: activeTrimData.model_id
+                })
+            });
+            
+            if (!res.ok) {
+                // If API throws an error
+                const errorText = await res.text();
+                throw new Error(errorText || "Registration failed.");
+            }
+            
+            // Success! Proceed to final step
+            // We fake some details for the success screen
+            const fakeVIN = "VIN" + Math.random().toString(36).substring(2, 15).toUpperCase();
+            const fakeLicense = Math.random().toString(36).substring(2, 8).toUpperCase();
+            
+            showWizardStep4_Success(activeTrimData, fakeVIN, fakeLicense);
+
+        } catch (err) {
+            console.error(err);
+            showWizardStep_Error(err.message);
+        }
+
+    }, 2000); // 2-second simulation
+}
+
+function showWizardStep4_Success(trim, vin, license) {
+    wizardLabel.textContent = "Car Registration Wizard (Step 3/3)";
+    wizardCloseBtn.style.display = "block"; // Show close button again
+    wizardBody.innerHTML = `
+        <div class="wizard-step-body">
+            <i class="bi bi-check-circle-fill text-success"></i>
+            <h2 class="mb-3">Car Registered!</h2>
+            <h5 class="mb-1">${trim.model_year} ${trim.model_name} ${trim.model_trim || ""}</h5>
+            <div class="text-start w-100 px-4 mt-3">
+                <p class="mb-1"><strong>VIN:</strong> ${vin}</p>
+                <p><strong>License Plate:</strong> ${license}</p>
+            </div>
+        </div>
+    `;
+    wizardFooter.innerHTML = `
+        <button type="button" class="btn btn-primary" id="wizardHomeBtn">Go to My Account</button>
+    `;
+
+    document.getElementById("wizardHomeBtn").addEventListener("click", () => {
+        // Redirect user to their account page
+        window.location.href = '/account'; 
+    });
+}
+
+function showWizardStep_Error(errorMessage) {
+    wizardLabel.textContent = "Registration Failed";
+    wizardCloseBtn.style.display = "block";
+    wizardBody.innerHTML = `
+        <div class="wizard-step-body">
+            <i class="bi bi-x-circle-fill text-danger"></i>
+            <h2 class="mb-3">Error</h2>
+            <p class="text-muted">${errorMessage}</p>
+        </div>
+    `;
+    wizardFooter.innerHTML = `
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    `;
+}
 
 // Initialize
 loadMakes();
