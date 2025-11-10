@@ -311,9 +311,6 @@ function showWizardStep3_Registering() {
     wizardFooter.innerHTML = `
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" disabled>Cancel</button>
     `;
-
-    // --- THIS IS YOUR ORIGINAL FETCH LOGIC ---
-    // We use a 2-second timeout to simulate the loading spinner
     
     setTimeout(async () => {
         const userId = localStorage.getItem("userId");
@@ -337,7 +334,7 @@ function showWizardStep3_Registering() {
             }
             
             // Success! Proceed to final step
-            // We fake some details for the success screen
+            // fake some details for the success screen
             const fakeVIN = "VIN" + Math.random().toString(36).substring(2, 15).toUpperCase();
             const fakeLicense = Math.random().toString(36).substring(2, 8).toUpperCase();
             
