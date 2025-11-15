@@ -21,7 +21,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
         // Store the Firestore userId in localStorage
         localStorage.setItem("userId", data.userId);
 
-        window.location.href = "/account"; // Redirect after login
+        window.location.href = "/home"; // Redirect after login
     } catch (err) {
         console.error(err);
         alert("Login failed. Please try again.");
