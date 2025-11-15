@@ -138,35 +138,21 @@ app.post('/account/change-password', (req, res) => {
   ;// Update Firebase
 });
 
-app.get('/car/:make/:model', async (req, res) => {
+app.get('/car/:trimId', async (req, res) => {
   const userId = req.session.username ? req.session.userId : null;
   if (!userId) return res.status(401).redirect("/");
 
-  const { make, model } = req.params;
-
+  const trimId = req.params.trimId;
   try {
-  // Step 1: Get all trims for that make/model
-  const trimsUrl = `https://www.carqueryapi.com/api/0.3/?cmd=getTrims&make=${make}&model=${model}`;
-  const trimsRes = await fetch(trimsUrl);
-  const trimsText = await trimsRes.text();
-  const trimsData = JSON.parse(trimsText.replace(/^\?\(|\);?$/g, ""));
-  const trims = trimsData.Trims || [];
+  const trimsUrl = `https://www.carqueryapi.com/api/0.3/?cmd=getModel&model=${trimId}`;
+  const trimRes = await fetch(trimsUrl);
+  const trimText = await trimRes.text();
+  const trimData = JSON.parse(trimText.replace(/^\?\(|\);?$/g, ""));
+  const car = trimData[0];
+  
+  const make = car.model_make_id;
+  const model = car.model_name;
 
-  if (trims.length === 0) {
-    return res.render("car-page", { make, model, carData: null });
-  }
-
-  // Step 2: Pick the newest year trim
-  const latestTrim = trims.reduce((a, b) => (a.model_year > b.model_year ? a : b));
-
-  // Step 3: Fetch detailed data using model_id
-  const modelUrl = `https://www.carqueryapi.com/api/0.3/?cmd=getModel&model=${latestTrim.model_id}`;
-  const modelRes = await fetch(modelUrl);
-  const modelText = await modelRes.text();
-  const modelData = JSON.parse(modelText.replace(/^\?\(|\);?$/g, ""));
-  const car = modelData[0];
-
-  // Step 4: Render EJS page
   res.render("car-page", { make, model, carData: car });
 } catch (err) {
   console.error(err);
