@@ -15,7 +15,7 @@
 
 <body>
   <main>
-    
+    <!-- Header -->
     <header id="menu-header">
       <button id="menuBtn" class="btn bi bi-list me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu"
         aria-controls="offcanvasExample"></button>
@@ -30,10 +30,12 @@
       <div style="width: 45px;"></div>
     </header>
     
+    <!-- Side Menu -->
     <aside>
       <%- include('partials/side-menu') %>
     </aside>
 
+    
     <div class="p-3 pb-5">
       <% if (!carData) { %>
         <div class="text-center text-muted mt-5">
@@ -55,7 +57,8 @@
           <hr class="mb-4">
 
           <div class="accordion mb-5" id="carPageAccordion">
-            
+
+            <!-- Car Model Specifications -->
             <div class="accordion-item shadow-sm mb-3">
               <h2 class="accordion-header" id="headingSpecs">
                 <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse"
@@ -67,6 +70,7 @@
                 data-bs-parent="#carPageAccordion">
                 <div class="accordion-body p-0">
                   
+                  <!-- Basic Info -->
                   <div class="card data-section-card mb-0 border-0">
                     <div class="card-body p-3">
                       <div class="d-flex align-items-center mb-3">
@@ -108,6 +112,7 @@
                     </div>
                   </div>
 
+                  <!-- Engine & Performance -->
                   <div class="card data-section-card mb-0 border-0">
                     <div class="card-body p-3">
                       <div class="d-flex align-items-center mb-3">
@@ -159,6 +164,7 @@
                     </div>
                   </div>
 
+                  <!-- Dimensions & Weight -->
                   <div class="card data-section-card mb-0 border-0">
                     <div class="card-body p-3">
                       <div class="d-flex align-items-center mb-3">
@@ -190,6 +196,7 @@
                     </div>
                   </div>
 
+                  <!-- Fuel Economy -->
                   <div class="card data-section-card mb-0 border-0">
                     <div class="card-body p-3">
                       <div class="d-flex align-items-center mb-3">
@@ -214,6 +221,7 @@
               </div>
             </div>
 
+            <!-- Live SpecCheck Data -->
             <div class="accordion-item shadow-sm mb-3">
               <h2 class="accordion-header" id="headingLive">
                 <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse"
@@ -225,11 +233,12 @@
                 data-bs-parent="#carPageAccordion">
                 <div class="accordion-body p-0">
                   
+                  <!-- Engine & Fuel -->
                   <div class="card data-section-card mb-0 border-0">
                     <div class="card-body p-3">
                       <div class="d-flex align-items-center mb-3">
                         <i class="bi bi-fuel-pump-fill text-primary fs-4 me-3"></i>
-                        <div class="section-title">Fuel & Efficiency</div>
+                        <div class="section-title">Engine & Fuel</div>
                       </div>
                       <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -237,43 +246,9 @@
                           <span class="fw-bold"><%= fuel_fill %>%</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                          Fuel Type:
-                          <span><%= fuel_type %></span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
                           Efficiency (Avg):
                           <span class="fw-bold"><%= fuel_efficiency %> km/L</span>
                         </li>
-                      </ul>
-                    </div>
-                  </div>
-
-                  <div class="card data-section-card mb-0 border-0">
-                    <div class="card-body p-3">
-                      <div class="d-flex align-items-center mb-3">
-                        <i class="bi bi-speedometer2 text-primary fs-4 me-3"></i>
-                        <div class="section-title">Tires & Pressure</div>
-                      </div>
-                      <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                          Front (L/R) Pressure:
-                          <span><%= tire_fl_pressure %> / <%= tire_fr_pressure %> PSI</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                          Tread Depth:
-                          <span class="fw-bold"><%= tire_tread_depth %> mm</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-
-                  <div class="card data-section-card mb-0 border-0">
-                    <div class="card-body p-3">
-                      <div class="d-flex align-items-center mb-3">
-                        <i class="bi bi-tools text-primary fs-4 me-3"></i>
-                        <div class="section-title">Engine & Fluids</div>
-                      </div>
-                      <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                           Oil Life:
                           <span class="fw-bold"><%= oil_life %>%</span>
@@ -286,6 +261,31 @@
                     </div>
                   </div>
 
+                  <!-- Tires & Pressure -->
+                  <div class="card data-section-card mb-0 border-0">
+                    <div class="card-body p-3">
+                      <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-speedometer2 text-primary fs-4 me-3"></i>
+                        <div class="section-title">Tires & Pressure</div>
+                      </div>
+                      <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                          Front (L/R) Pressure:
+                          <span><%= tire_fl_pressure %> / <%= tire_fr_pressure %> PSI</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                          Rear (L/R) Pressure:
+                          <span><%= tire_rl_pressure %> / <%= tire_rr_pressure %> PSI</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                          Tread Depth:
+                          <span class="fw-bold"><%= tire_tread_depth %> mm</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <!-- Driving Statistics -->
                   <div class="card data-section-card mb-0 border-0">
                     <div class="card-body p-3">
                       <div class="d-flex align-items-center mb-3">
@@ -305,6 +305,10 @@
                           Average Speed:
                           <span><%= avg_speed %> km/h</span>
                         </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                          Top Speed (Trip):
+                          <span><%= top_speed %> km/h</span>
+                        </li>
                       </ul>
                     </div>
                   </div>
@@ -312,6 +316,7 @@
               </div>
             </div>
 
+            <!-- Notes -->
             <div class="accordion-item shadow-sm">
               <h2 class="accordion-header" id="headingNotes">
                 <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse"
@@ -333,7 +338,8 @@
             </div>
             </div>
           <% } %>
-
+        
+            <!-- Delete Car Button -->
             <div class="d-grid mb-5">
               <button id="deleteCarModalBtn" type="button" class="btn btn-danger" data-bs-toggle="modal"
                 data-bs-target="#deleteCarModal">
@@ -341,6 +347,7 @@
               </button>
             </div>
             
+            <!-- Ask AI Button -->
             <button class="ask-ai-btn" id="askAiBtn" data-bs-toggle="modal" data-bs-target="#aichatModal">
               <div class="ask-ai-text">Ask<br>AI</div>
             </button>
@@ -355,6 +362,7 @@
     </footer>
   </main>
 
+  <!-- Edit notes modal -->
   <div class="modal fade" id="editNotesModal" tabindex="-1" aria-labelledby="editNotesModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -376,6 +384,7 @@
     </div>
   </div>
   
+  <!-- AI Chat Modal -->
   <div class="modal fade" id="aichatModal" tabindex="-1" aria-labelledby="aichatModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content" style="border-radius: 15px;">
@@ -404,6 +413,7 @@
     </div>
   </div>
 
+  <!-- Delete Car Modal -->
   <div class="modal fade" id="deleteCarModal" tabindex="-1" aria-labelledby="deleteCarModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">

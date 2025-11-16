@@ -175,16 +175,13 @@ app.get('/car/:carId', async (req, res) => {
       
       // Live Car Metrics
       fuel_fill: 78,
-      fuel_type: "Premium Unleaded",
-      fuel_efficiency: 11.8, // km/L (or L/100km, adjust units as needed)
+      fuel_efficiency: 11.8,
       tire_fl_pressure: 34,
       tire_fr_pressure: 34,
       tire_rl_pressure: 36,
       tire_rr_pressure: 36,
       tire_tread_depth: 7.2, // mm
       oil_life: 68,
-      coolant_temp: 92, // C
-      transmission_fluid: "OK",
       battery_voltage: 12.6, // V
       odometer: 14520, // km
       trip_distance: 285.5, // km
