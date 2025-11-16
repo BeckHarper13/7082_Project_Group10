@@ -5,13 +5,12 @@
 // const carId = window.location.pathname.split('/')[2];
 
 // Initialize Bootstrap modal
-const editNotesModal = new bootstrap.Modal(document.getElementById('editNotesModal'));
-const aichatModal = new bootstrap.Modal(document.getElementById('aichatModal'));
+// const editNotesModal = new bootstrap.Modal(document.getElementById('editNotesModal'));
 
 // Get elements
 const editBtn = document.getElementById('editBtn');
 const backBtn = document.getElementById('backBtn');
-const deleteBtn = document.getElementById('deleteBtn');
+const deleteCarModalBtn = document.getElementById('deleteCarModalBtn');
 const saveNoteBtn = document.getElementById('saveNoteBtn');
 const askAiBtn = document.getElementById('askAiBtn');
 const notesTextarea = document.getElementById('notesTextarea');
@@ -19,15 +18,11 @@ const notesDisplay = document.getElementById('notesDisplay');
 const chatTextarea = document.getElementById('chatTextarea');
 const sendChatBtn = document.getElementById('sendChatBtn');
 const chatBody = document.getElementById('chatBody');
+let deleteCarBtn = null;
 
 // Edit button
 editBtn.addEventListener('click', function (e) {
     editNotesModal.show();
-});
-
-// Ask AI button
-askAiBtn.addEventListener('click', function () {
-    aichatModal.show();
 });
 
 // Back button
@@ -35,41 +30,46 @@ backBtn.addEventListener('click', function () {
     window.location.href = `/home`;
 });
 
-// Delete button (WIP)
-deleteBtn.addEventListener('click', function () {
-    if (confirm('Are you sure you want to delete this car?')) {
-        window.location.href = `/cars/${carId}/delete`;
+// Delete button
+deleteCarModalBtn.addEventListener('click', () => {
+    if (deleteCarBtn == null) {
+        deleteCarBtn = document.getElementById("deleteCarBtn");
+            deleteCarBtn.addEventListener('click', () => {
+            console.log("DELETING CAR");
+        })
     }
 });
 
 // Edit > Save Note button (POST to /cars/<car_id>/note)
-saveNoteBtn.addEventListener('click', function (e) {
-    const noteContent = notesTextarea.value;
+// saveNoteBtn.addEventListener('click', function (e) {
+//     const noteContent = notesTextarea.value;
 
-    fetch(`/cars/${carId}/note`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ note: noteContent })
-    })
-        .then(response => {
-            if (response.ok) {
-                // Update the display with new note
-                notesDisplay.textContent = noteContent;
-                editNotesModal.hide();
-            } else {
-                alert(`Failed to save note: ${response.status} ${response.statusText}\nPlease try again.`);
-            }
-        })
-        .catch(error => {
-            console.error('Error saving note:', error);
-            alert('An error occurred while saving the note.');
-        });
-});
+//     fetch(`/cars/${carId}/note`, {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({ note: noteContent })
+//     })
+//         .then(response => {
+//             if (response.ok) {
+//                 // Update the display with new note
+//                 notesDisplay.textContent = noteContent;
+//                 editNotesModal.hide();
+//             } else {
+//                 alert(`Failed to save note: ${response.status} ${response.statusText}\nPlease try again.`);
+//             }
+//         })
+//         .catch(error => {
+//             console.error('Error saving note:', error);
+//             alert('An error occurred while saving the note.');
+//         });
+// });
 
 // Ask AI > Send chat message
 sendChatBtn.addEventListener('click', async function () {
+    console.log("AI MESSAGE SENDING");
     const message = chatTextarea.value.trim();
 
+    console.log(message);
     if (message) {
         // Add user message to chat
         addChatMessage(message, 'user');

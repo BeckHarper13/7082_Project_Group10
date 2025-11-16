@@ -143,6 +143,8 @@ app.get('/car/:trimId', async (req, res) => {
   if (!userId) return res.status(401).redirect("/");
 
   const trimId = req.params.trimId;
+  // const carId = req.params.carId;
+
   try {
   const trimsUrl = `https://www.carqueryapi.com/api/0.3/?cmd=getModel&model=${trimId}`;
   const trimRes = await fetch(trimsUrl);
@@ -268,16 +270,11 @@ app.post('/account/add-car', async (req, res) => {
     }
 });
 
-
-
-
-
 app.get('/ai', async (req, res) => {
   res.sendFile(path.join(__dirname, 'public/html/gpt-test.html'))
 });
 
 app.post('/ai_processor', async (req, res) => {
-  console.log(req.body.prompt);
   const response = await openai.responses.create({
     model: "gpt-5-nano",
     input: req.body.prompt,
@@ -285,7 +282,6 @@ app.post('/ai_processor', async (req, res) => {
     // max_output_tokens: 300,
   });
   let gpt_output = response.output_text;
-  console.log(response);
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(JSON.stringify({ gpt_response: gpt_output }));
 });
