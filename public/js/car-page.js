@@ -48,7 +48,11 @@ deleteCarModalBtn.addEventListener('click', () => {
                 document.getElementById("responseText").innerHTML = "Car deleted!";
                 document.getElementById("deleteCarBtn").hidden = true;
                 document.getElementById("cancelBtn").hidden = true;
-                document.getElementById("backToAccountBtn").hidden = false;                
+                const backToAccountBtn = document.getElementById("backToAccountBtn"); 
+                backToAccountBtn.hidden = false;
+                backToAccountBtn.addEventListener("click", () => {
+                    window.location.href = "/account";
+                })
             } else {
                 const data = await res.json(); // get error message from backend
                 document.getElementById("responseText").innerText = data.error || "Something went wrong.";
@@ -83,10 +87,8 @@ deleteCarModalBtn.addEventListener('click', () => {
 
 // Ask AI > Send chat message
 sendChatBtn.addEventListener('click', async function () {
-    console.log("AI MESSAGE SENDING");
     const message = chatTextarea.value.trim();
 
-    console.log(message);
     if (message) {
         // Add user message to chat
         addChatMessage(message, 'user');

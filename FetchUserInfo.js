@@ -97,4 +97,26 @@ async function getUserandCars(username) {
     }
 }
 
-module.exports = { fetchUser, saveUser, getUserandCars };
+async function getCar(carId, userId) {
+    try {
+        const usersRef = db.collection('users');
+        const carsRef = usersRef.doc(userId).collection('cars');
+        const carsSnapshot = await carsRef.get();
+        let foundCar = null;
+
+        for (const doc of carsSnapshot.docs) {          
+            if (doc.id.trim() === carId.trim()) { 
+                foundCar = doc.data();
+                return foundCar;
+            }
+        }
+        console.error('Error: car not found with id: ', carId);
+        return; 
+
+    } catch (e) {
+        console.error('Error fetching user and cars: ', e);
+        throw e;
+    }
+}
+
+module.exports = { fetchUser, saveUser, getUserandCars, getCar };
