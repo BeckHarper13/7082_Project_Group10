@@ -138,12 +138,12 @@ app.post('/account/change-password', (req, res) => {
   ;// Update Firebase
 });
 
-app.get('/car/:trimId', async (req, res) => {
+app.get('/car', async (req, res) => {
   const userId = req.session.username ? req.session.userId : null;
   if (!userId) return res.status(401).redirect("/");
 
-  const trimId = req.params.trimId;
-  // const carId = req.params.carId;
+  const trimId = req.query.trimId;
+  const carId = req.query.carId;
 
   try {
   const trimsUrl = `https://www.carqueryapi.com/api/0.3/?cmd=getModel&model=${trimId}`;
@@ -155,7 +155,7 @@ app.get('/car/:trimId', async (req, res) => {
   const make = car.model_make_id;
   const model = car.model_name;
 
-  res.render("car-page", { make, model, carData: car });
+  res.render("car-page", { make, model, carId, carData: car });
 } catch (err) {
   console.error(err);
   res.status(500).send("Failed to load car data.");
@@ -235,8 +235,26 @@ app.get('/api/trims', async (req, res) => {
   }
 });
 
+app.post('/delete-car', async (req, res) => {
+  const { userId, carId } = req.body;
 
+  if (!userId || !carId) {
+    return res.status(400).send("Missing required fields");
+  }
 
+  try {
+    const userRef = db.collection('users').doc(userId);
+    const carsRef = userRef.collection('cars');
+
+    await carsRef.doc(carId).delete();    
+    
+    res.status(200).send("Car deleted successfully");
+  } catch (err) {
+    console.error("Error deleting car:", err);
+    res.status(500).send("Error deleting car");
+  }
+
+});
 
 app.post('/account/add-car', async (req, res) => {
     const { userId, make, model, trimId } = req.body;

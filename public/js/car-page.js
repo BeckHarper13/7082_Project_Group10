@@ -26,16 +26,33 @@ editBtn.addEventListener('click', function (e) {
 });
 
 // Back button
-backBtn.addEventListener('click', function () {
-    window.location.href = `/home`;
+backBtn.addEventListener('click', () => {
+    window.location.href = document.referrer;
 });
 
 // Delete button
 deleteCarModalBtn.addEventListener('click', () => {
+    document.getElementById("backToAccountBtn").hidden = true;
     if (deleteCarBtn == null) {
         deleteCarBtn = document.getElementById("deleteCarBtn");
-            deleteCarBtn.addEventListener('click', () => {
-            console.log("DELETING CAR");
+            deleteCarBtn.addEventListener('click', async () => {
+            document.getElementById("responseText").innerHTML = "Deleting car...";
+            const res = await fetch('/delete-car', {
+                method: 'POST',
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify({userId : localStorage.getItem("userId"), carId : carId})
+              });
+            if (res.ok) {
+                document.getElementById("responseText").innerHTML = "Car deleted!";
+                document.getElementById("deleteCarBtn").hidden = true;
+                document.getElementById("cancelBtn").hidden = true;
+                document.getElementById("backToAccountBtn").hidden = false;                
+            } else {
+                const data = await res.json(); // get error message from backend
+                document.getElementById("responseText").innerText = data.error || "Something went wrong.";
+            }
         })
     }
 });
