@@ -186,12 +186,6 @@ function showTrimInfo(trimId) {
 
 
 document.getElementById("saveCarBtn").addEventListener("click", () => {
-        const userId = localStorage.getItem("userId");
-        if (!userId) {
-            alert("You must be logged in to register a car.");
-            return;
-        }
-        
         // Save the trim data for the wizard to use
         activeTrimData = trim; 
         
@@ -313,14 +307,14 @@ function showWizardStep3_Registering() {
     `;
     
     setTimeout(async () => {
-        const userId = localStorage.getItem("userId");
+        // const userId = localStorage.getItem("userId");
         
         try {
             const res = await fetch("/account/add-car", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    userId,
+                    // userId,
                     make: document.getElementById("make").value,
                     model: document.getElementById("model").value,
                     trimId: activeTrimData.model_id

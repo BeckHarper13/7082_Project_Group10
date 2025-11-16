@@ -274,7 +274,8 @@ app.get('/api/trims', async (req, res) => {
 });
 
 app.post('/delete-car', async (req, res) => {
-  const { userId, carId } = req.body;
+  const userId = req.session.userId;
+  const carId = req.body.carId;
 
   if (!userId || !carId) {
     return res.status(400).send("Missing required fields");
@@ -295,7 +296,8 @@ app.post('/delete-car', async (req, res) => {
 });
 
 app.post('/account/add-car', async (req, res) => {
-    const { userId, make, model, trimId } = req.body;
+    const userId = req.session.userId;
+    const { make, model, trimId } = req.body;
 
     if (!userId || !make || !model || !trimId) {
         return res.status(400).send("Missing required fields");

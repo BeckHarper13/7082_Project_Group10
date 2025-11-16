@@ -1,11 +1,3 @@
-// Wait for DOM to be ready
-//document.addEventListener('DOMContentLoaded', function () {
-
-// Get the car ID from the URL
-// const carId = window.location.pathname.split('/')[2];
-
-// Initialize Bootstrap modal
-// const editNotesModal = new bootstrap.Modal(document.getElementById('editNotesModal'));
 
 // Get elements
 const editBtn = document.getElementById('editBtn');
@@ -42,7 +34,7 @@ deleteCarModalBtn.addEventListener('click', () => {
                 headers: {
                   "Content-Type": "application/json"
                 },
-                body: JSON.stringify({userId : localStorage.getItem("userId"), carId : carId})
+                body: JSON.stringify({carId : carId})
               });
             if (res.ok) {
                 document.getElementById("responseText").innerHTML = "Car deleted!";
@@ -150,4 +142,3 @@ function addChatMessage(message, sender) {
     chatBody.appendChild(messageDiv);
     chatBody.scrollTop = chatBody.scrollHeight;
 }
-//});
