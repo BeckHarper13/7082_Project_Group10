@@ -138,28 +138,76 @@ app.post('/account/change-password', (req, res) => {
   ;// Update Firebase
 });
 
-app.get('/car/:trimId', async (req, res) => {
-  const userId = req.session.username ? req.session.userId : null;
-  if (!userId) return res.status(401).redirect("/");
+// index.js
 
-  const trimId = req.params.trimId;
-  // const carId = req.params.carId;
+app.get('/car/:carId', async (req, res) => {
+  const userId = req.session.username ? req.session.userId : null;
+  if (!userId) {
+    return res.status(401).redirect("/");
+  }
+
+  const carId = req.params.carId;
+  const car = await fetchsuser.getCar(carId, userId) 
+  if (!car) {
+    return res.status(404).send(`Car not found with ID:, ${carId}`);
+  }
+  const trimId = car.trimId
+
 
   try {
-  const trimsUrl = `https://www.carqueryapi.com/api/0.3/?cmd=getModel&model=${trimId}`;
-  const trimRes = await fetch(trimsUrl);
-  const trimText = await trimRes.text();
-  const trimData = JSON.parse(trimText.replace(/^\?\(|\);?$/g, ""));
-  const car = trimData[0];
-  
-  const make = car.model_make_id;
-  const model = car.model_name;
+    const trimsUrl = `https://www.carqueryapi.com/api/0.3/?cmd=getModel&model=${trimId}`;
+    const trimRes = await fetch(trimsUrl);
+    const trimText = await trimRes.text();
+    const trimData = JSON.parse(trimText.replace(/^\?\(|\);?$/g, ""));
+    const staticCarData = trimData[0];
+    
+    const make = staticCarData.model_make_id;
+    const model = staticCarData.model_name;
+    const notes = "Next service due at 20,000km. Need to check squeaky brakes on cold mornings.";
 
-  res.render("car-page", { make, model, carData: car });
-} catch (err) {
-  console.error(err);
-  res.status(500).send("Failed to load car data.");
-}
+
+    // --- SAMPLE LIVE CAR DATA ---
+    const liveCarData = {
+      // Data related to the SpecCheck device
+      car_id: carId, 
+      license_plate: "SGT-2025",
+      vin: "1HGCM3B19GA000000",
+      
+      // Live Car Metrics
+      fuel_fill: 78,
+      fuel_type: "Premium Unleaded",
+      fuel_efficiency: 11.8, // km/L (or L/100km, adjust units as needed)
+      tire_fl_pressure: 34,
+      tire_fr_pressure: 34,
+      tire_rl_pressure: 36,
+      tire_rr_pressure: 36,
+      tire_tread_depth: 7.2, // mm
+      oil_life: 68,
+      coolant_temp: 92, // C
+      transmission_fluid: "OK",
+      battery_voltage: 12.6, // V
+      odometer: 14520, // km
+      trip_distance: 285.5, // km
+      avg_speed: 62, // km/h
+      top_speed: 185, // km/h
+    };
+
+    // Merge static (carData) and live data for rendering
+    const renderData = {
+      ...liveCarData,
+      make,
+      model,
+      notes,
+      carData: staticCarData,
+    };
+
+
+    res.render("car-page", renderData);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Failed to load car data.");
+  }
 });
 
 
