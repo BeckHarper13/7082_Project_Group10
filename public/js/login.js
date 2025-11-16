@@ -17,10 +17,6 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
             return;
         }
 
-        const data = await res.json();
-        // Store the Firestore userId in localStorage
-        localStorage.setItem("userId", data.userId);
-
         window.location.href = "/home"; // Redirect after login
     } catch (err) {
         console.error(err);
