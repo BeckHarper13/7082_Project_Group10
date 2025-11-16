@@ -333,9 +333,12 @@ app.get('/ai', async (req, res) => {
 });
 
 app.post('/ai_processor', async (req, res) => {
+  let prompt = "";
+  prompt += req.body.prompt + "Below is general car data.\n" + req.body.carInfo + "Below is live car data.\n" + req.body.liveCarInfo + "\nGive minimal output";
+
   const response = await openai.responses.create({
     model: "gpt-5-nano",
-    input: req.body.prompt,
+    input: prompt,
     store: true,
     // max_output_tokens: 300,
   });

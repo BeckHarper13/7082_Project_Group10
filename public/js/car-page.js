@@ -11,6 +11,14 @@ const chatTextarea = document.getElementById('chatTextarea');
 const sendChatBtn = document.getElementById('sendChatBtn');
 const chatBody = document.getElementById('chatBody');
 let deleteCarBtn = null;
+const carDataString = carData.replace(/&#34;/g,"")
+const carDataJSON = carDataString
+    .replace(/([{,])(\s*)([A-Za-z0-9_]+)(\s*):/g, '$1"$3":') // wrap keys in quotes
+    .replace(/:([A-Za-z_][A-Za-z0-9_]*)/g, ':"$1"');         // wrap string values
+const liveCarDataString = liveCarData.replace(/&#34;/g,"")
+const liveCarDataJSON = liveCarDataString
+    .replace(/([{,])(\s*)([A-Za-z0-9_]+)(\s*):/g, '$1"$3":') // wrap keys in quotes
+    .replace(/:([A-Za-z_][A-Za-z0-9_]*)/g, ':"$1"');         // wrap string values
 
 // Edit button
 editBtn.addEventListener('click', function (e) {
@@ -80,7 +88,6 @@ deleteCarModalBtn.addEventListener('click', () => {
 // Ask AI > Send chat message
 sendChatBtn.addEventListener('click', async function () {
     const message = chatTextarea.value.trim();
-
     if (message) {
         // Add user message to chat
         addChatMessage(message, 'user');
@@ -94,7 +101,7 @@ sendChatBtn.addEventListener('click', async function () {
             const response = await fetch("/ai_processor", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt: prompt })
+                body: JSON.stringify({ prompt, carInfo : carDataString, liveCarInfo : liveCarDataString })
             });
             
             if (!response.ok) {

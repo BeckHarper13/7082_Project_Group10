@@ -306,15 +306,12 @@ function showWizardStep3_Registering() {
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" disabled>Cancel</button>
     `;
     
-    setTimeout(async () => {
-        // const userId = localStorage.getItem("userId");
-        
+    setTimeout(async () => {        
         try {
             const res = await fetch("/account/add-car", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    // userId,
                     make: document.getElementById("make").value,
                     model: document.getElementById("model").value,
                     trimId: activeTrimData.model_id
