@@ -1,6 +1,10 @@
- const db = require('./database');
- const bcrypt = require("bcrypt");
- 
+const db = require('./database');
+const bcrypt = require("bcrypt");
+
+// Simple email validator
+const isValidEmail = (email) => {
+    return typeof email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+};
 
 // Comparing
 const checkPassword = async (plainPassword, hash) => {
@@ -9,8 +13,18 @@ const checkPassword = async (plainPassword, hash) => {
 
 async function fetchUser(req, email, password, res) {
     try {
+        // Basic input validation
+        if (!email || typeof email !== 'string' || !isValidEmail(email)) {
+            return res.status(400).send('Invalid or missing email');
+        }
+        if (!password || typeof password !== 'string' || password.length < 4) {
+            return res.status(400).send('Password must be at least 4 characters');
+        }
+
+        const trimmedEmail = email.trim();
+
         const usersRef = db.collection('users');
-        const snapshot = await usersRef.where('email', '==', email).get();
+        const snapshot = await usersRef.where('email', '==', trimmedEmail).get();
         if (snapshot.empty) {
             return res.status(400).send('Invalid email or password');
         }
@@ -32,6 +46,7 @@ async function fetchUser(req, email, password, res) {
         if (req && req.session) {
             req.session.username = userData.username;
             req.session.userId = userId;
+            req.session.email = trimmedEmail;
         } else {
             console.warn('Session not available on request; skipping session store.');
         }
@@ -50,23 +65,35 @@ async function fetchUser(req, email, password, res) {
 // Save user to Firestore
 async function saveUser(req, username, email, passwordHash, res) {
     try {
+        // Basic input validation
+        if (!username || typeof username !== 'string' || !username.trim()) {
+            return res.status(400).send('Username is required');
+        }
+        if (!email || typeof email !== 'string' || !isValidEmail(email)) {
+            return res.status(400).send('Invalid or missing email');
+        }
+        // We expect the caller to validate raw password length before hashing.
+        if (!passwordHash || typeof passwordHash !== 'string' || !passwordHash.trim()) {
+            return res.status(400).send('Invalid password/hash');
+        }
+
         const docRef = await db.collection('users').add({
-            username,
-            email,
+            username: username.trim(),
+            email: email.trim(),
             passwordHash,
             createdAt: new Date()
         });
 
         // Store username and userId in session for future checks
         if (req && req.session) {
-            req.session.username = username;
+            req.session.username = username.trim();
             req.session.userId = docRef.id;
         } else {
             console.warn('Session not available on request; skipping session store.');
         }
 
         console.log('User added with ID: ', docRef.id);
-        res.send('Signup successful!');
+        res.redirect('/home');
     } catch (e) {
         console.error('Error adding user: ', e);
         res.status(500).send('Error signing up');
@@ -75,8 +102,11 @@ async function saveUser(req, username, email, passwordHash, res) {
 
 async function getUserandCars(username) {
     try {
+        if (!username || typeof username !== 'string' || !username.trim()) {
+            throw new Error('Invalid or missing username');
+        }
         const usersRef = db.collection('users');
-        const snapshot = await usersRef.where('username', '==', username).get();
+        const snapshot = await usersRef.where('username', '==', username.trim()).get();
         if (snapshot.empty) {
             throw new Error('User not found');
         }
@@ -99,19 +129,26 @@ async function getUserandCars(username) {
 
 async function getCar(carId, userId) {
     try {
+        if (!carId || typeof carId !== 'string' || !carId.trim()) {
+            throw new Error('Invalid or missing carId');
+        }
+        if (!userId || typeof userId !== 'string' || !userId.trim()) {
+            throw new Error('Invalid or missing userId');
+        }
+
         const usersRef = db.collection('users');
-        const carsRef = usersRef.doc(userId).collection('cars');
+        const carsRef = usersRef.doc(userId.trim()).collection('cars');
         const carsSnapshot = await carsRef.get();
         let foundCar = null;
 
-        for (const doc of carsSnapshot.docs) {          
-            if (doc.id.trim() === carId.trim()) { 
+        for (const doc of carsSnapshot.docs) {
+            if (doc.id.trim() === carId.trim()) {
                 foundCar = doc.data();
                 return foundCar;
             }
         }
         console.error('Error: car not found with id: ', carId);
-        return; 
+        return;
 
     } catch (e) {
         console.error('Error fetching user and cars: ', e);

@@ -28,6 +28,17 @@ app.use(session({
   cookie: { secure: false } // Set to true if using https
 }));
 
+// Authentication middleware: ensure the user is logged in
+function ensureLoggedIn(req, res, next) {
+  const userId = req.session && req.session.userId;
+  if (!userId) {
+    return res.status(401).redirect('/');
+  }
+  // make userId available on req for handlers
+  req.userId = userId;
+  next();
+}
+
 // index.js - Simple Node.js HTTP server
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -66,14 +77,9 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/html/landing-page.html'))
 })
 
-app.get('/search', (req, res) => {
-  const userId = req.session.username ? req.session.userId : null;
-  if (!userId) {
-    return res.status(401).redirect("/");
-  }
-
-  res.render("search-cars");
-})
+app.get('/search', ensureLoggedIn, (req, res) => {
+  res.render('search-cars');
+});
 
 app.get('/signup', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/html/signup.html')); // serve signup.html
@@ -83,16 +89,10 @@ app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/html/login.html')); // serve login.html
 })
 
-app.get('/home', (req, res) => {
-  const userId = req.session.username ? req.session.userId : null;
-  if (!userId) {
-    return res.status(401).redirect("/");
-  }
+app.get('/home', ensureLoggedIn, (req, res) => {
+  console.log('Fetching account for username: ', req.session && req.session.username);
 
-  console.log('Fetching account for user: ', req.session.username);
-  const username = req.session.username;
-
-  fetchsuser.getUserandCars(username)
+  fetchsuser.getUserandCars(req.session.username)
     .then(data => {
       res.render('home', {
         username: data.user.username,
@@ -101,20 +101,14 @@ app.get('/home', (req, res) => {
     })
     .catch(err => {
       console.error('Error fetching user and cars: ', err);
-      res.status(500).send("Internal Server Error");
+      res.status(500).send('Internal Server Error');
     });
-})
+});
 
-app.get('/account', (req, res) => {
-  const userId = req.session.username ? req.session.userId : null;
-  if (!userId) {
-    return res.status(401).redirect("/");
-  }
+app.get('/account', ensureLoggedIn, (req, res) => {
+  console.log('Fetching account for username: ', req.session && req.session.username);
 
-  console.log('Fetching account for user: ', req.session.username);
-  const username = req.session.username;
-
-  fetchsuser.getUserandCars(username)
+  fetchsuser.getUserandCars(req.session.username)
     .then(data => {
       res.render('account', {
         username: data.user.username,
@@ -124,9 +118,9 @@ app.get('/account', (req, res) => {
     })
     .catch(err => {
       console.error('Error fetching user and cars: ', err);
-      res.status(500).send("Internal Server Error");
+      res.status(500).send('Internal Server Error');
     });
-})
+});
 
 app.post('/account/change-email', (req, res) => {
   return res.status(501).send("Not Implemented");
@@ -138,12 +132,7 @@ app.post('/account/change-password', (req, res) => {
   ;// Update Firebase
 });
 
-app.get('/car', async (req, res) => {
-  const userId = req.session.username ? req.session.userId : null;
-  if (!userId) {
-    return res.status(401).redirect("/");
-  }
-
+app.get('/car', ensureLoggedIn, async (req, res) => {
   const trimId = req.query.trimId;
   const carId = req.query.carId;
 
@@ -201,16 +190,11 @@ app.get('/car', async (req, res) => {
 });
 
 
-app.get('/car/:carId/note', (req, res) => {
-  const userId = req.session.username ? req.session.userId : null;
-  if (!userId) {
-    return res.status(401).send("Unauthorized");
-  }
-
-  const carId = req.params.carId; 
-  return res.status(501).send("Not Implemented");
-  ;// Save the note to database for this car ID
-})
+app.get('/car/:carId/note', ensureLoggedIn, (req, res) => {
+  const carId = req.params.carId;
+  return res.status(501).send('Not Implemented');
+  // Save the note to database for this car ID
+});
 
 
 app.post('/signup', async (req, res) => {

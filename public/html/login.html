@@ -19,15 +19,21 @@
         <div class="p-3">
             <h2 class="text-center mb-4">Access Your SpecCheck Account</h2>
 
-            <form id="loginForm">
+            <form id="loginForm" novalidate>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
+                    <input type="email" class="form-control" id="email" name="email" required minlength="4" aria-describedby="emailHelp">
+                    <div class="invalid-feedback" id="emailFeedback">
+                        Please enter a valid email of at least 4 characters.
+                    </div>
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-3"></div>
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
+                    <input type="password" class="form-control" id="password" name="password" required minlength="4">
+                    <div class="invalid-feedback" id="passwordFeedback">
+                        Password must be at least 4 characters long.
+                    </div>
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100 mt-3">Login</button>
@@ -47,6 +53,48 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        (function () {
+            const form = document.getElementById('loginForm');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+
+            function validateField(input, minLen) {
+                const val = input.value.trim();
+                if (val.length < minLen) {
+                    input.classList.add('is-invalid');
+                    return false;
+                } else {
+                    input.classList.remove('is-invalid');
+                    return true;
+                }
+            }
+
+            // Remove invalid state on input
+            [emailInput, passwordInput].forEach(input => {
+                input.addEventListener('input', () => validateField(input, 4));
+            });
+
+            form.addEventListener('submit', function (e) {
+                const emailOk = validateField(emailInput, 4);
+                const passOk = validateField(passwordInput, 4);
+
+                // Also rely on browser's email validity for email format
+                if (!emailInput.checkValidity()) {
+                    emailInput.classList.add('is-invalid');
+                }
+
+                if (!emailOk || !passOk || !emailInput.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return;
+                }
+
+                // If valid, allow submit to proceed (your ../js/login.js can handle the submit)
+            });
+        })();
+    </script>
 
     <script src="../js/login.js"></script>
 
