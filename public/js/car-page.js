@@ -61,6 +61,43 @@ deleteCarModalBtn.addEventListener('click', () => {
     }
 });
 
+
+
+
+
+
+
+saveNoteBtn.onclick = async () => {
+  const updatedNotes = notesTextarea.value;
+
+
+  try {
+    const res = await fetch(`/car/${carId}/note`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ notes: updatedNotes })
+    });
+
+    if (!res.ok) {
+      alert("Error saving notes!");
+      return;
+    }
+
+    alert("Notes saved!");
+    //editNotesModal.hide();
+
+    // Update display on page
+    notesDisplay.innerText = updatedNotes;
+
+    //document.querySelector(".usable-notes-text").innerText = updatedNotes;
+  } catch (err) {
+    console.error("Save notes failed:", err);
+    alert("Failed to connect to server.");
+  }
+};
+
+
+
 // Edit > Save Note button (POST to /cars/<car_id>/note)
 // saveNoteBtn.addEventListener('click', function (e) {
 //     const noteContent = notesTextarea.value;

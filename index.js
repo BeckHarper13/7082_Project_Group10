@@ -145,8 +145,16 @@ app.get('/car', ensureLoggedIn, async (req, res) => {
     
     const make = staticCarData.model_make_id;
     const model = staticCarData.model_name;
-    const notes = "Next service due at 20,000km. Need to check squeaky brakes on cold mornings.";
+    let notes = "Next service due at 20,000km. Need to check squeaky brakes on cold mornings.";
 
+
+    //Serve Actual Notes from DB
+    const carRef = db.collection('users').doc(req.userId).collection('cars').doc(carId);
+    const carSnap = await carRef.get();
+    if (carSnap.exists) {
+        const carData = carSnap.data();
+        notes = carData.notes || "";
+    }
 
     // --- SAMPLE LIVE CAR DATA ---
     const liveCarData = {
@@ -190,11 +198,31 @@ app.get('/car', ensureLoggedIn, async (req, res) => {
 });
 
 
-app.get('/car/:carId/note', ensureLoggedIn, (req, res) => {
+app.post('/car/:carId/note', ensureLoggedIn, async (req, res) => {
+  const userId = req.session.userId;
   const carId = req.params.carId;
-  return res.status(501).send('Not Implemented');
-  // Save the note to database for this car ID
+  const { notes } = req.body;
+
+  if (!notes || !carId) {
+    return res.status(400).send("Missing notes or carId");
+  }
+
+  try {
+    const carRef = db
+      .collection('users')
+      .doc(userId)
+      .collection('cars')
+      .doc(carId);
+
+    await carRef.update({ notes });
+
+    res.status(200).send("Notes saved.");
+  } catch (err) {
+    console.error("Error saving notes:", err);
+    res.status(500).send("Error saving notes");
+  }
 });
+
 
 
 app.post('/signup', async (req, res) => {
@@ -302,6 +330,7 @@ app.post('/account/add-car', async (req, res) => {
             make,
             model,
             trimId,
+            notes: "",
             createdAt: new Date()
         });
 
@@ -349,3 +378,5 @@ app.listen(PORT, HOST, () => {
 
 // process.on('SIGINT', () => shutdown('SIGINT'));
 // process.on('SIGTERM', () => shutdown('SIGTERM'));
+
+
