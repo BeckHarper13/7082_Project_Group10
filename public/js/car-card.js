@@ -13,26 +13,34 @@ document.addEventListener('input', (e) => {
 
 document.querySelectorAll('.start-car-btn').forEach(btn => {
   btn.addEventListener('click', (e) => {
-    e.stopImmediatePropagation();  // stops ALL click behavior
     e.preventDefault();            // prevents link navigation
+    
+    const card = btn.closest('.mockCarInteraction');
+    const tempSlider = card.querySelector('.temp-slider');
+    const textDiv = btn.querySelector('.start-car-text');
+
     // Toggle the class
     if (btn.classList.contains('car-started')) {
+        // STOP CAR
         btn.classList.remove('car-started');
-        const card = btn.closest('.mockCarInteraction');
-        const tempSlider = card.querySelector('.temp-slider');
+        textDiv.innerHTML = "Start<br>Car";
+        tempSlider.classList.remove('show');
         tempSlider.innerHTML = "";
     } else {
-      btn.classList.add('car-started');
-        const card = btn.closest('.mockCarInteraction');
-        const tempSlider = card.querySelector('.temp-slider');
+        // START CAR
+        btn.classList.add('car-started');
+        textDiv.innerHTML = "Stop<br>Car";
         tempSlider.innerHTML = renderTempSlider();
+        tempSlider.classList.add('show');
     }
   });
 });
 
 function renderTempSlider() {
-    return `<label class="form-label">
-                Temp: <span class="rangeValue fw-bold">20</span>°C
-            </label>
-            <input type="range" class="form-range tempRange" min="10" max="30" value="20" step="1">`;
+    return `<div class="d-flex flex-column justify-content-center">
+                <label class="form-label mb-1 small text-muted text-center">
+                    A/C: <span class="rangeValue fw-bold text-dark">20</span>°C
+                </label>
+                <input type="range" class="form-range tempRange" min="10" max="30" value="20" step="1">
+            </div>`;
 }
