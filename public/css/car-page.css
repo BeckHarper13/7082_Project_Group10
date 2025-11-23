@@ -53,38 +53,6 @@
     margin-bottom: 0.25rem;
 }
 
-.ask-ai-btn {
-    position: sticky;
-    bottom: 100px;
-    float: right;
-    clear: both;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background-color: white;
-    border: 2px solid #dee2e6;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 201;
-    margin-left: auto;
-    margin-right: 20px;
-    margin-bottom: 80px;
-}
-
-.ask-ai-btn:hover {
-    background-color: #f8f9fa;
-}
-
-.ask-ai-text {
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-align: center;
-    line-height: 1.1;
-}
-
 .nav-btn {
     flex: 1;
     padding: 0.75rem;
