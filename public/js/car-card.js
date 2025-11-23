@@ -23,14 +23,14 @@ document.querySelectorAll('.start-car-btn').forEach(btn => {
         contentDiv.innerHTML = `<div class="spinner-border text-primary" role="status" style="width: 1.5rem; height: 1.5rem; border-width: 3px;"></div>`;
         tempSlider.innerHTML = `<div class="text-muted small ms-2 fst-italic d-flex align-items-center" style="height: 100%;">Stopping car...</div>`;
         
-        // DELAY
+        // SIMULATE DELAY
         setTimeout(() => {
             btn.classList.remove('is-loading');
             contentDiv.innerHTML = `<div class="start-car-text">Start<br>Car</div>`;
             tempSlider.innerHTML = "";
             tempSlider.classList.add('d-none');
             
-        }, 2000);
+        }, 1000);
   } 
     // START CAR
     else if (!btn.classList.contains('is-loading')) {        

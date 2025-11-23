@@ -14,8 +14,8 @@
                 <p class="text-muted small mb-0 mt-1"><%= car.year %></p>
             <% } %>
             
-            <a href="/car?trimId=<%= encodeURIComponent(car.trimId) %>&carId=<%= encodeURIComponent(car.id) %>" class="stretched-link"></a>
         </div>
+        <a href="/car?trimId=<%= encodeURIComponent(car.trimId) %>&carId=<%= encodeURIComponent(car.id) %>" class="stretched-link"></a>
 
         <div class="row row-cols-2 g-3 info-grid pt-1"> 
             <div class="col d-flex align-items-center">
@@ -84,11 +84,6 @@
 
     .vehicle-card {
         width: 20rem;
-    }
-
-    /* Default (OFF) state */
-    .car-start-switch .car-start-input {
-      color: red;
     }
 
     .start-car-btn {
