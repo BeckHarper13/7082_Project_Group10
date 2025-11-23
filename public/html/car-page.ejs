@@ -347,7 +347,10 @@
               </button>
             </div>
     </div>
-    
+      
+    <!-- Ask AI Button and AI Chat Modal -->
+    <%- include('partials/ai-chat-modal', {make, model}) %>
+
     <footer class="fixed-bottom bg-white border-top shadow-sm p-3">
       <div class="d-flex justify-content-around container">
         <button class="btn text-secondary fs-3 p-2" id="backBtn"><i class="bi bi-arrow-left"></i></button>
@@ -378,9 +381,6 @@
         </div>
     </div>
   </div>
-  
-  <!-- Ask AI Button and AI Chat Modal -->
-  <%- include('partials/ai-chat-modal', {make, model}) %>
 
   <!-- Delete Car Modal -->
   <div class="modal fade" id="deleteCarModal" tabindex="-1" aria-labelledby="deleteCarModalLabel" aria-hidden="true">
