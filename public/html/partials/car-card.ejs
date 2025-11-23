@@ -48,12 +48,12 @@
             </div>
         </div>
         
-        <% if (car.note) { %>
+        <% if (car.notes) { %>
         <ul class="list-group list-group-flush border-top">
             <li class="list-group-item bg-light border-0 py-2">
                 <i class="bi bi-pencil-square me-2 text-secondary"></i>
                 <small class="text-muted">Note: </small>
-                <small id="note"><%= car.note %></small>
+                <small id="note"><%= car.notes %></small>
             </li>
         </ul>
         <% } %>
