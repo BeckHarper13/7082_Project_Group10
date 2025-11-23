@@ -1,21 +1,24 @@
 <a href="/car?trimId=<%= encodeURIComponent(car.trimId) %>&carId=<%= encodeURIComponent(car.id) %>" class="text-decoration-none text-dark">
-    <div class="card shadow-sm mb-4 border-0 rounded-3">
+    <div class="card shadow mb-4 border-0 rounded-3" style="background-color: rgb(246, 248, 251);">
         <div class="card-body pb-2">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <h5 class="card-title mb-0 fw-bold">
-                    <%= car.make %> <%= car.model %>
-                </h5>
-                <i class="bi bi-chevron-right text-primary fs-5"></i>
+            
+            <div class="border-start border-primary border-5 ps-3 py-1 mb-2">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0 fw-bold">
+                        <%= car.make %> <%= car.model %>
+                    </h5>
+                    <i class="bi bi-chevron-right text-primary fs-5"></i>
+                </div>
+                
+                <% if (car.year) { %>
+                    <p class="text-muted small mb-0 mt-1"><%= car.year %></p>
+                <% } %>
             </div>
             
-            <% if (car.year) { %>
-                <p class="text-muted small mb-3"><%= car.year %></p>
-            <% } %>
-
-            <div class="row row-cols-2 g-3 info-grid">
+            <div class="row row-cols-2 g-3 info-grid pt-3"> 
                 
                 <div class="col d-flex align-items-center">
-                    <i class="bi bi-fuel-pump-fill fs-4 me-2"></i>
+                    <i class="bi bi-fuel-pump-fill fs-4 me-2"></i> 
                     <div>
                         <small class="text-muted d-block">Fuel</small>
                         <span class="fw-bold" id="fuel"><%= car.fuelFill %>%</span>
@@ -23,7 +26,7 @@
                 </div>
 
                 <div class="col d-flex align-items-center">
-                    <i class="bi bi-tools fs-4 me-2"></i>
+                    <i class="bi bi-tools fs-4 me-2"></i> 
                     <div>
                         <small class="text-muted d-block">Oil Life</small>
                         <span class="fw-bold" id="oilLevel"><%= car.oilLevel %>%</span>
@@ -31,7 +34,7 @@
                 </div>
 
                 <div class="col d-flex align-items-center">
-                    <i class="bi bi-speedometer2 fs-4 me-2"></i>
+                    <i class="bi bi-speedometer2 fs-4 me-2"></i> 
                     <div>
                         <small class="text-muted d-block">Tires</small>
                         <span class="fw-bold" id="tirePressure"><%= car.tirePressure %> PSI</span>
@@ -39,7 +42,7 @@
                 </div>
                 
                 <div class="col d-flex align-items-center">
-                    <i class="bi bi-battery-half fs-4 me-2"></i>
+                    <i class="bi bi-battery-half fs-4 me-2"></i> 
                     <div>
                         <small class="text-muted d-block">Battery</small>
                         <span class="fw-bold" id="battery"><%= car.batteryVoltage %> V</span>
