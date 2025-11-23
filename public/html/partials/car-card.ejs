@@ -52,13 +52,15 @@
     <div class="mockCarInteraction d-flex align-items-center py-2 my-3 mx-3 rounded bg-light border-opacity-50 border px-3 position-relative" style="z-index: 2; min-height: 80px;">
         
         <button class="start-car-btn flex-shrink-0">
-            <div class="start-car-text">Start<br>Car</div>
+            <div class="start-car-content">
+                <div class="start-car-text">Start<br>Car</div>
+            </div>
         </button>
         
-        <div class="temp-slider flex-grow-1 ms-3">
+        <div class="temp-slider flex-grow-1 ms-3 d-none">
         </div>
     </div>
-    
+
     <% if (car.notes) { %>
     <ul class="list-group list-group-flush border-top position-relative">
         <li class="list-group-item bg-light border-0 py-2">
@@ -89,22 +91,19 @@
       color: red;
     }
 
-    /* UPDATED BUTTON STYLE */
     .start-car-btn {
-        /* Removed position:sticky and clear:both */
         width: 65px;
-        height: 65px; 
+        height: 65px;
         border-radius: 50%;
         background-color: white;
-        border: 2px solid #dee2e6;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border: 1px solid #dee2e6;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        z-index: 5;
     }
-    
+
     .start-car-btn:active {
         transform: scale(0.95);
     }
@@ -113,30 +112,27 @@
         background-color: rgb(80, 154, 80);
         border-color: rgb(80, 154, 80);
         color: white;
-    }
-    
-    /* Ensure text color changes when button is green */
-    .car-started .start-car-text {
-        color: white;
+        box-shadow: 0 0 10px rgba(80, 154, 80, 0.4);
     }
     
     .start-car-text {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         font-weight: 700;
         text-align: center;
         line-height: 1.1;
         color: #495057;
     }
-    
-    /* Smooth slide animation for slider */
-    .temp-slider {
-        transition: all 0.3s ease;
+
+    .form-range {
+        height: 1rem;
+    }
+
+    .fade-in {
+        animation: fadeIn 0.5s;
     }
     
-    /* Make the range slider look a bit better */
-    .form-label {
-        font-size: 0.85rem;
-        margin-bottom: 5px;
-        margin-top: 10px;
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
     }
 </style>

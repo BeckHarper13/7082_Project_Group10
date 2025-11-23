@@ -1,43 +1,60 @@
 document.addEventListener('input', (e) => {
-  const target = e.target;
-  if (!target.classList || !target.classList.contains('tempRange')) return;
-
-  // try to find a nearby display element
-  let valueEl = target.closest('.temp-slider')?.querySelector('.rangeValue');
-  if (!valueEl) {
-    // as a fallback, look for a sibling span
-    valueEl = target.previousElementSibling?.querySelector('.rangeValue') || null;
+  if (e.target.classList.contains('tempRange')) {
+    const valueEl = e.target.closest('.temp-slider').querySelector('.rangeValue');
+    if (valueEl) valueEl.textContent = e.target.value;
   }
-  if (valueEl) valueEl.textContent = target.value;
 });
 
 document.querySelectorAll('.start-car-btn').forEach(btn => {
   btn.addEventListener('click', (e) => {
-    e.preventDefault();            // prevents link navigation
+    e.preventDefault();
     
     const card = btn.closest('.mockCarInteraction');
     const tempSlider = card.querySelector('.temp-slider');
-    const textDiv = btn.querySelector('.start-car-text');
+    const contentDiv = btn.querySelector('.start-car-content');
 
-    // Toggle the class
-    if (btn.classList.contains('car-started')) {
-        // STOP CAR
+    console.log(btn.classList)
+    // STOP CAR
+    if (btn.classList.contains('car-started')) {        
+        btn.classList.add('is-loading');
         btn.classList.remove('car-started');
-        textDiv.innerHTML = "Start<br>Car";
-        tempSlider.classList.remove('show');
-        tempSlider.innerHTML = "";
-    } else {
-        // START CAR
-        btn.classList.add('car-started');
-        textDiv.innerHTML = "Stop<br>Car";
-        tempSlider.innerHTML = renderTempSlider();
-        tempSlider.classList.add('show');
+        
+        // spinner
+        contentDiv.innerHTML = `<div class="spinner-border text-primary" role="status" style="width: 1.5rem; height: 1.5rem; border-width: 3px;"></div>`;
+        tempSlider.innerHTML = `<div class="text-muted small ms-2 fst-italic d-flex align-items-center" style="height: 100%;">Stopping car...</div>`;
+        
+        // DELAY
+        setTimeout(() => {
+            btn.classList.remove('is-loading');
+            contentDiv.innerHTML = `<div class="start-car-text">Start<br>Car</div>`;
+            tempSlider.innerHTML = "";
+            tempSlider.classList.add('d-none');
+            
+        }, 2000);
+  } 
+    // START CAR
+    else if (!btn.classList.contains('is-loading')) {        
+        btn.classList.add('is-loading');
+        
+        // spinner 
+        contentDiv.innerHTML = `<div class="spinner-border text-primary" role="status" style="width: 1.5rem; height: 1.5rem; border-width: 3px;"></div>`;
+        tempSlider.innerHTML = `<div class="text-muted small ms-2 fst-italic d-flex align-items-center" style="height: 100%;">Starting car...</div>`;
+        tempSlider.classList.remove('d-none');
+        
+        // SIMULATE DELAY
+        setTimeout(() => {
+            btn.classList.remove('is-loading');
+            btn.classList.add('car-started'); 
+            contentDiv.innerHTML = `<div class="start-car-text text-white">Stop<br>Car</div>`;            
+            tempSlider.innerHTML = renderTempSlider();
+            
+        }, 2000); 
     }
   });
 });
 
 function renderTempSlider() {
-    return `<div class="d-flex flex-column justify-content-center">
+    return `<div class="d-flex flex-column justify-content-center fade-in">
                 <label class="form-label mb-1 small text-muted text-center">
                     A/C: <span class="rangeValue fw-bold text-dark">20</span>°C
                 </label>
