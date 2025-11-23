@@ -341,10 +341,6 @@ app.post('/account/add-car', async (req, res) => {
     }
 });
 
-app.get('/ai', async (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/html/gpt-test.html'))
-});
-
 app.post('/ai_processor', async (req, res) => {
   let prompt = "";
   prompt += req.body.prompt + "Below is general car data.\n" + req.body.carInfo + "Below is live car data.\n" + req.body.liveCarInfo + "\nGive minimal output";
