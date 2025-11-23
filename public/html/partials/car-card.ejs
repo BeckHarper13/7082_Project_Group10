@@ -47,7 +47,13 @@
                 </div>
             </div>
         </div>
-        
+        <div class="mockCarInteraction">
+            <button class="start-car-btn">
+                <div class="start-car-text">Start<br>Car</div>
+            </button>
+            <div class="mb-3 w-75 mx-auto temp-slider">
+            </div>
+        </div>
         <% if (car.notes) { %>
         <ul class="list-group list-group-flush border-top">
             <li class="list-group-item bg-light border-0 py-2">
@@ -59,3 +65,55 @@
         <% } %>
     </div>
 </a>
+<script src="/js/car-card.js"></script>
+<style>
+    .vehicle-cards-holder {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center; /* Centers all cards */
+        gap: 20px; /* Even spacing between cards */
+        margin: 10px 0;
+        width: 90%
+    }
+
+    .vehicle-card {
+        width: 20rem;
+    }
+
+    /* Default (OFF) state */
+    .car-start-switch .car-start-input {
+      /* background-color: #dc3545; red */
+      /* border-color: #dc3545; */
+      color: red;
+    }
+
+    .start-car-btn {
+        position: sticky;
+        clear: both;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background-color: white;
+        /* border: 2px solid #dee2e6; */
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 201;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 5px;
+    }
+
+    .car-started {
+        background-color: rgb(80, 154, 80);
+    }
+    
+    .start-car-text {
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-align: center;
+        line-height: 1.1;
+    }
+</style>
