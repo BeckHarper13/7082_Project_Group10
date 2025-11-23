@@ -11,6 +11,8 @@ const chatTextarea = document.getElementById('chatTextarea');
 const sendChatBtn = document.getElementById('sendChatBtn');
 const chatBody = document.getElementById('chatBody');
 let deleteCarBtn = null;
+
+// ENSURE THAT THERE ARE NO HYPHENS IN CAR DATA OR LIVE CAR DATA
 const carDataString = carData.replace(/&#34;/g,"")
 const carDataJSON = carDataString
     .replace(/([{,])(\s*)([A-Za-z0-9_]+)(\s*):/g, '$1"$3":') // wrap keys in quotes
@@ -61,12 +63,6 @@ deleteCarModalBtn.addEventListener('click', () => {
     }
 });
 
-
-
-
-
-
-
 saveNoteBtn.onclick = async () => {
   const updatedNotes = notesTextarea.value;
 
@@ -82,9 +78,8 @@ saveNoteBtn.onclick = async () => {
       alert("Error saving notes!");
       return;
     }
-
-    alert("Notes saved!");
-    //editNotesModal.hide();
+    
+    bootstrap.Modal.getInstance(document.getElementById('editNotesModal')).hide();
 
     // Update display on page
     notesDisplay.innerText = updatedNotes;
@@ -95,32 +90,6 @@ saveNoteBtn.onclick = async () => {
     alert("Failed to connect to server.");
   }
 };
-
-
-
-// Edit > Save Note button (POST to /cars/<car_id>/note)
-// saveNoteBtn.addEventListener('click', function (e) {
-//     const noteContent = notesTextarea.value;
-
-//     fetch(`/cars/${carId}/note`, {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({ note: noteContent })
-//     })
-//         .then(response => {
-//             if (response.ok) {
-//                 // Update the display with new note
-//                 notesDisplay.textContent = noteContent;
-//                 editNotesModal.hide();
-//             } else {
-//                 alert(`Failed to save note: ${response.status} ${response.statusText}\nPlease try again.`);
-//             }
-//         })
-//         .catch(error => {
-//             console.error('Error saving note:', error);
-//             alert('An error occurred while saving the note.');
-//         });
-// });
 
 // Ask AI > Send chat message
 sendChatBtn.addEventListener('click', async function () {

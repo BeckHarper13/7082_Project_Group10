@@ -160,7 +160,7 @@ app.get('/car', ensureLoggedIn, async (req, res) => {
     const liveCarData = {
       // Data related to the SpecCheck device
       car_id: carId, 
-      license_plate: "SGT-2025",
+      license_plate: "SGT2025",
       vin: "1HGCM3B19GA000000",
       
       // Live Car Metrics
