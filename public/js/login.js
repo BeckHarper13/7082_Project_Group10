@@ -1,5 +1,6 @@
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
     e.preventDefault(); // Prevent normal form submission
+    document.getElementById("errorMsgText").innerHTML = "";
 
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
@@ -13,7 +14,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
         if (!res.ok) {
             const text = await res.text();
-            alert(text); // Show backend error message
+            document.getElementById("errorMsgText").innerHTML = text;
             return;
         }
 

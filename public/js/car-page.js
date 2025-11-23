@@ -13,11 +13,11 @@ const chatBody = document.getElementById('chatBody');
 let deleteCarBtn = null;
 
 // ENSURE THAT THERE ARE NO HYPHENS IN CAR DATA OR LIVE CAR DATA
-const carDataString = carData.replace(/&#34;/g,"")
+const carDataString = carData.replace(/&#34;|-/g,"")
 const carDataJSON = carDataString
     .replace(/([{,])(\s*)([A-Za-z0-9_]+)(\s*):/g, '$1"$3":') // wrap keys in quotes
     .replace(/:([A-Za-z_][A-Za-z0-9_]*)/g, ':"$1"');         // wrap string values
-const liveCarDataString = liveCarData.replace(/&#34;/g,"")
+const liveCarDataString = liveCarData.replace(/&#34;|-/g,"")
 const liveCarDataJSON = liveCarDataString
     .replace(/([{,])(\s*)([A-Za-z0-9_]+)(\s*):/g, '$1"$3":') // wrap keys in quotes
     .replace(/:([A-Za-z_][A-Za-z0-9_]*)/g, ':"$1"');         // wrap string values
