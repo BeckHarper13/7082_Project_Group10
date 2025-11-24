@@ -38,17 +38,7 @@
                 </h2>
             </div>
         </div>
-
-        <!-- Buttons -->
-        <section class="edit-account-buttons text-center mb-5">
-            <button class="btn btn-outline-primary me-2" id="emailBtn">
-                <i class="bi bi-envelope me-2"></i>Change Email
-            </button>
-            <button class="btn btn-outline-primary" id="passBtn">
-                <i class="bi bi-lock me-2"></i>Change Password
-            </button>
-        </section>
-
+        <br><br>
         <!-- Your Cars Section -->
         <section class="your-cars container mb-5">
             <h2 class="mb-4 text-center">Your Cars</h2>
@@ -61,7 +51,8 @@
                     <div class="card-body d-flex w-100 justify-content-between align-items-center py-3">
                         <div>
                         <h5 class="mb-0 fw-bold">
-                            <%= car.make %> <%= car.model %>
+                            <%= car.make.charAt(0).toUpperCase() + car.make.slice(1) %>
+                            <%= car.model.charAt(0).toUpperCase() + car.model.slice(1) %>
                         </h5>
                         <% if (car.year) { %>
                             <small class="text-muted d-block">
@@ -97,7 +88,7 @@
         </section>
     </main>
 
-    <!-- Change Email Modal -->
+    <!-- Change Email Modal (unused) -->
     <div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -125,7 +116,7 @@
         </div>
     </div>
 
-    <!-- Change Password Modal -->
+    <!-- Change Password Modal (unused) -->
     <div class="modal fade" id="passModal" tabindex="-1" aria-labelledby="passModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -155,7 +146,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/account.js"></script>
+    <!-- <script src="../js/account.js"></script> -->
 </body>
 
 </html>

@@ -1,61 +1,144 @@
-<a href="/car?trimId=<%= encodeURIComponent(car.trimId) %>&carId=<%= encodeURIComponent(car.id) %>" class="text-decoration-none text-dark">
-    <div class="card shadow-sm mb-4 border-0 rounded-3">
-        <div class="card-body pb-2">
-            <div class="d-flex justify-content-between align-items-center mb-2">
+<div class="card shadow mb-4 border-0 rounded-3 position-relative" style="background-color: rgb(246, 248, 251);">
+    
+    <div class="card-body pb-2">
+        
+        <div class="border-start border-primary border-5 ps-3 py-1 mb-2 position-relative">
+            <div class="d-flex justify-content-between align-items-center">
                 <h5 class="card-title mb-0 fw-bold">
-                    <%= car.make %> <%= car.model %>
+                    <%= car.make.charAt(0).toUpperCase() + car.make.slice(1) %>
+                    <%= car.model.charAt(0).toUpperCase() + car.model.slice(1) %>
                 </h5>
                 <i class="bi bi-chevron-right text-primary fs-5"></i>
             </div>
             
             <% if (car.year) { %>
-                <p class="text-muted small mb-3"><%= car.year %></p>
+                <p class="text-muted small mb-0 mt-1"><%= car.year %></p>
             <% } %>
+            
+        </div>
+        <a href="/car?trimId=<%= encodeURIComponent(car.trimId) %>&carId=<%= encodeURIComponent(car.id) %>" class="stretched-link"></a>
 
-            <div class="row row-cols-2 g-3 info-grid">
-                
-                <div class="col d-flex align-items-center">
-                    <i class="bi bi-fuel-pump-fill fs-4 me-2"></i>
-                    <div>
-                        <small class="text-muted d-block">Fuel</small>
-                        <span class="fw-bold" id="fuel"><%= car.fuelFill %>%</span>
-                    </div>
+        <div class="row row-cols-2 g-3 info-grid pt-1"> 
+            <div class="col d-flex align-items-center">
+                <i class="bi bi-fuel-pump-fill fs-4 me-2"></i> 
+                <div>
+                    <small class="text-muted d-block">Fuel</small>
+                    <span class="fw-bold" id="fuel"><%= car.fuelFill %>%</span>
                 </div>
-
-                <div class="col d-flex align-items-center">
-                    <i class="bi bi-tools fs-4 me-2"></i>
-                    <div>
-                        <small class="text-muted d-block">Oil Life</small>
-                        <span class="fw-bold" id="oilLevel"><%= car.oilLevel %>%</span>
-                    </div>
+            </div>
+            <div class="col d-flex align-items-center">
+                <i class="bi bi-tools fs-4 me-2"></i> 
+                <div>
+                    <small class="text-muted d-block">Oil Life</small>
+                    <span class="fw-bold" id="oilLevel"><%= car.oilLevel %>%</span>
                 </div>
-
-                <div class="col d-flex align-items-center">
-                    <i class="bi bi-speedometer2 fs-4 me-2"></i>
-                    <div>
-                        <small class="text-muted d-block">Tires</small>
-                        <span class="fw-bold" id="tirePressure"><%= car.tirePressure %> PSI</span>
-                    </div>
+            </div>
+             <div class="col d-flex align-items-center">
+                <i class="bi bi-speedometer2 fs-4 me-2"></i> 
+                <div>
+                    <small class="text-muted d-block">Tires</small>
+                    <span class="fw-bold" id="tirePressure"><%= car.tirePressure %> PSI</span>
                 </div>
-                
-                <div class="col d-flex align-items-center">
-                    <i class="bi bi-battery-half fs-4 me-2"></i>
-                    <div>
-                        <small class="text-muted d-block">Battery</small>
-                        <span class="fw-bold" id="battery"><%= car.batteryVoltage %> V</span>
-                    </div>
+            </div>
+             <div class="col d-flex align-items-center">
+                <i class="bi bi-battery-half fs-4 me-2"></i> 
+                <div>
+                    <small class="text-muted d-block">Battery</small>
+                    <span class="fw-bold" id="battery"><%= car.batteryVoltage %> V</span>
                 </div>
             </div>
         </div>
-        
-        <% if (car.note) { %>
-        <ul class="list-group list-group-flush border-top">
-            <li class="list-group-item bg-light border-0 py-2">
-                <i class="bi bi-pencil-square me-2 text-secondary"></i>
-                <small class="text-muted">Note: </small>
-                <small id="note"><%= car.note %></small>
-            </li>
-        </ul>
-        <% } %>
     </div>
-</a>
+
+    <div class="mockCarInteraction d-flex align-items-center py-2 my-3 mx-3 rounded bg-light border-opacity-50 border px-3 position-relative" style="z-index: 2; min-height: 80px;">
+        
+        <button class="start-car-btn flex-shrink-0">
+            <div class="start-car-content">
+                <div class="start-car-text">Start<br>Car</div>
+            </div>
+        </button>
+        
+        <div class="temp-slider flex-grow-1 ms-3 d-none">
+        </div>
+    </div>
+
+    <% if (car.notes) { %>
+    <ul class="list-group list-group-flush border-top position-relative">
+        <li class="list-group-item bg-light border-0 py-2">
+            <i class="bi bi-pencil-square me-2 text-secondary"></i>
+            <small class="text-muted">Note: </small>
+            <small id="note"><%= car.notes %></small>
+        </li>
+    </ul>
+    <% } %>
+</div>
+<script src="/js/car-card.js"></script>
+<style>
+    .vehicle-cards-holder {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center; /* Centers all cards */
+        gap: 20px; /* Even spacing between cards */
+        margin: 10px 0;
+        width: 90%
+    }
+
+    .vehicle-card {
+        width: 20rem;
+    }
+
+    .start-car-btn {
+        width: 65px;
+        height: 65px;
+        border-radius: 50%;
+        background-color: white;
+        border: 1px solid #dee2e6;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .start-car-btn:active {
+        transform: scale(0.95);
+    }
+
+    .car-started {
+        background-color: rgb(80, 154, 80);
+        border-color: rgb(80, 154, 80);
+        color: white;
+        box-shadow: 0 0 10px rgba(80, 154, 80, 0.4);
+    }
+    
+    .start-car-text {
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-align: center;
+        line-height: 1.1;
+        color: #495057;
+    }
+
+    .form-range {
+        height: 1rem;
+    }
+
+    .fade-in {
+        animation: fadeIn 0.5s;
+    }
+
+    /* Slider colors */
+    .temp-slider .form-range::-webkit-slider-runnable-track {
+        background-color: #dae4ff;
+        border-radius: 5px;
+    }
+    .temp-slider .form-range::-moz-range-track {
+        background-color: #dae4ff;
+        border-radius: 5px;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+</style>

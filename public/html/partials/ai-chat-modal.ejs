@@ -1,0 +1,72 @@
+<button class="ask-ai-btn" id="askAiBtn" data-bs-toggle="modal" data-bs-target="#aichatModal">
+    <div class="ask-ai-text">Ask<br>AI</div>
+</button>
+
+<div class="modal fade" id="aichatModal" tabindex="-1" aria-labelledby="aichatModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content" style="border-radius: 15px;">
+        <div class="modal-header bg-info text-white"
+          style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+          <h5 class="modal-title fw-bold" id="aichatModalLabel">AI Chat</h5>
+          <button type="button" id="aiButton" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="chatBody" style="min-height: 300px; max-height: 400px; overflow-y: auto;">
+          <div class="d-flex flex-row justify-content-start mb-4">
+            <img src="../img/speccheck-tiny.png" alt="SpecCheck AI" style="width: 45px; height: 45px;">
+            <div class="p-3 ms-3" style="border-radius: 15px; background-color: rgba(57, 192, 237, 0.2);">
+              <p class="small mb-0" id="aiResText">
+                I am a SpecCheck AI Agent. 
+                <% if (make != null && model != null) { %>
+                    What would you like to know about your <%= make %> <%= model %>?
+                <% } else { %>
+                    I can help you answer any of your car related questions!
+                <% } %>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="input-group">
+            <textarea class="form-control" id="chatTextarea" rows="2" placeholder="Type your message..."></textarea>
+            <button class="btn btn-primary" type="button" id="sendChatBtn">
+              <i class="bi bi-send"></i> Send
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/ai-chat.js"></script>
+  <style>
+    .ask-ai-btn {
+    position: sticky;
+    bottom: 100px;
+    float: right;
+    clear: both;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: white;
+    border: 2px solid #dee2e6;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 201;
+    margin-left: auto;
+    margin-right: 20px;
+    margin-bottom: 80px;
+}
+
+.ask-ai-btn:hover {
+    background-color: #f8f9fa;
+}
+
+.ask-ai-text {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.1;
+}
+  </style>

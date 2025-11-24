@@ -1,0 +1,24 @@
+.wizard-step-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 250px;
+    text-align: center;
+}
+
+.wizard-step-body .bi {
+    font-size: 80px;
+    margin-bottom: 1.5rem;
+}
+
+.wizard-step-body .spinner-border {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1.5rem;
+}
+
+.wizard-step-body .text-success {
+    color: #198754 !important;
+    /* Bootstrap Green */
+}
