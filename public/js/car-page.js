@@ -2,12 +2,13 @@
 // Get elements
 const editBtn = document.getElementById('editBtn');
 const backBtn = document.getElementById('backBtn');
-const deleteCarModalBtn = document.getElementById('deleteCarModalBtn');
+const deleteCarModalBtn = document.getElementById('deleteCarModalBtn'); // big delete car button on bottom of page
+const deleteCarBtn = document.getElementById('deleteBtn'); // red trashcan footer button
 const saveNoteBtn = document.getElementById('saveNoteBtn');
 const askAiBtn = document.getElementById('askAiBtn');
 const notesTextarea = document.getElementById('notesTextarea');
 const notesDisplay = document.getElementById('notesDisplay');
-let deleteCarBtn = null;
+let deleteCarBtnInModal = null;
 
 // ENSURE THAT THERE ARE NO HYPHENS IN CAR DATA OR LIVE CAR DATA
 const carDataString = carData.replace(/&#34;|-/g,"")
@@ -29,12 +30,16 @@ backBtn.addEventListener('click', () => {
     window.location.href = document.referrer;
 });
 
+deleteCarBtn.addEventListener('click', () => {
+  deleteCarModalBtn.click();
+})
+
 // Delete button
 deleteCarModalBtn.addEventListener('click', () => {
     document.getElementById("backToAccountBtn").hidden = true;
-    if (deleteCarBtn == null) {
-        deleteCarBtn = document.getElementById("deleteCarBtn");
-            deleteCarBtn.addEventListener('click', async () => {
+    if (deleteCarBtnInModal == null) {
+        deleteCarBtnInModal = document.getElementById("deleteCarBtn");
+            deleteCarBtnInModal.addEventListener('click', async () => {
             document.getElementById("responseText").innerHTML = "Deleting car...";
             const res = await fetch('/delete-car', {
                 method: 'POST',

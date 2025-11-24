@@ -149,7 +149,7 @@ app.get('/car', ensureLoggedIn, async (req, res) => {
 
 
     //Serve Actual Notes from DB
-    const carRef = db.collection('users').doc(req.userId).collection('cars').doc(carId);
+    const carRef = db.collection('users').doc(req.session.userId).collection('cars').doc(carId);
     const carSnap = await carRef.get();
     if (carSnap.exists) {
         const carData = carSnap.data();
