@@ -1,3 +1,31 @@
+document.getElementById("signupForm").addEventListener("submit", async (e) => {
+    e.preventDefault(); // Prevent normal form submission
+    document.getElementById("errorMsgText").innerHTML = "";
+
+    const email = document.getElementById("email").value;
+    const username = document.getElementById("username").value
+    const password = document.getElementById("password").value;
+
+    try {
+        const res = await fetch("/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, email, password }),
+        });
+
+        if (!res.ok) {
+            const text = await res.text();
+            document.getElementById("errorMsgText").innerHTML = text;
+            return;
+        }
+
+        window.location.href = "/home"; // Redirect after login
+    } catch (err) {
+        console.error(err);
+        alert("Login failed. Please try again.");
+    }
+});
+
 (function () {
             'use strict';
             const form = document.querySelector('.needs-validation');
