@@ -77,9 +77,17 @@ async function saveUser(req, username, email, passwordHash, res) {
             return res.status(400).send('Invalid password/hash');
         }
 
-        const docRef = await db.collection('users').add({
+        const trimmedEmail = email.trim();
+
+        const usersRef = db.collection('users');
+        const existing = await usersRef.where('email', '==', trimmedEmail).get();
+        if (!existing.empty) {
+            return res.status(400).send('Email already in use');
+        }
+
+        const docRef = await usersRef.add({
             username: username.trim(),
-            email: email.trim(),
+            email: trimmedEmail,
             passwordHash,
             createdAt: new Date()
         });

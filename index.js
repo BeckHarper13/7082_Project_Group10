@@ -132,6 +132,16 @@ app.post('/account/change-password', (req, res) => {
   ;// Update Firebase
 });
 
+app.post('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Error destroying session during logout:', err);
+      return res.status(500).send('Logout failed');
+    }
+    res.redirect('/');
+  });
+});
+
 app.get('/car', ensureLoggedIn, async (req, res) => {
   const trimId = req.query.trimId;
   const carId = req.query.carId;
