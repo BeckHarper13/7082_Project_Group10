@@ -51,7 +51,8 @@
                     <div class="card-body d-flex w-100 justify-content-between align-items-center py-3">
                         <div>
                         <h5 class="mb-0 fw-bold">
-                            <%= car.make %> <%= car.model %>
+                            <%= car.make.charAt(0).toUpperCase() + car.make.slice(1) %>
+                            <%= car.model.charAt(0).toUpperCase() + car.model.slice(1) %>
                         </h5>
                         <% if (car.year) { %>
                             <small class="text-muted d-block">

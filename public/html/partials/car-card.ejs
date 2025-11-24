@@ -5,7 +5,8 @@
         <div class="border-start border-primary border-5 ps-3 py-1 mb-2 position-relative">
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="card-title mb-0 fw-bold">
-                    <%= car.make %> <%= car.model %>
+                    <%= car.make.charAt(0).toUpperCase() + car.make.slice(1) %>
+                    <%= car.model.charAt(0).toUpperCase() + car.model.slice(1) %>
                 </h5>
                 <i class="bi bi-chevron-right text-primary fs-5"></i>
             </div>
