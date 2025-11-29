@@ -1,3 +1,4 @@
+const { expect } = require("chai");
 const { Builder, By, until } = require("selenium-webdriver");
 const chrome = require("selenium-webdriver/chrome");
 require("chromedriver");
@@ -51,7 +52,7 @@ describe("Login Page E2E Test", function () {
         await submitBtn.click();
 
         // Wait for server to respond or page to update
-        await driver.sleep(1000); // adjust if you're doing async fetch in login.js
+        // await driver.sleep(1000); // adjust if you're doing async fetch in login.js
 
         // Check if error message appeared
         // let errorText = "";
@@ -59,9 +60,17 @@ describe("Login Page E2E Test", function () {
         //     const error = await driver.findElement(By.id("errorMsgText"));
         //     errorText = await error.getText();
         // } catch (e) {}
-        await driver.wait(until.urlContains('/home'), 5000);
-
-        // At this point, we only check behavior.
-        // You can change this to check redirect or validate errors.
     });
+    it("Should load the correct users page", async () => {
+                await driver.wait(until.urlContains('/home'), 10000);
+        const url = await driver.getCurrentUrl();
+        expect(url).to.include('/home');
+        
+        const nameH3 = await driver.wait(until.elementLocated(By.xpath("//h3[1]")), 10000);
+        const nameText = await nameH3.getText();
+        expect(nameText).to.equal("Welcome back unco");
+
+        await driver.sleep(2000);
+
+    })
 });
