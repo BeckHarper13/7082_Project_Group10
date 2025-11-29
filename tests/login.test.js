@@ -50,19 +50,9 @@ describe("Login Page E2E Test", function () {
         // Submit button
         const submitBtn = await driver.findElement(By.css("button[type='submit']"));
         await submitBtn.click();
-
-        // Wait for server to respond or page to update
-        // await driver.sleep(1000); // adjust if you're doing async fetch in login.js
-
-        // Check if error message appeared
-        // let errorText = "";
-        // try {
-        //     const error = await driver.findElement(By.id("errorMsgText"));
-        //     errorText = await error.getText();
-        // } catch (e) {}
     });
     it("Should load the correct users page", async () => {
-                await driver.wait(until.urlContains('/home'), 10000);
+        await driver.wait(until.urlContains('/home'), 10000);
         const url = await driver.getCurrentUrl();
         expect(url).to.include('/home');
         
