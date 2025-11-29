@@ -3,7 +3,8 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const path = require('path');
-const express = require('express');
+// const express = require('express');
+import express from "express";
 const app = express();
 const db = require('./database');
 const bcrypt = require("bcrypt");
@@ -57,21 +58,6 @@ const hashPassword = async (plainPassword) => {
   const hash = await bcrypt.hash(plainPassword, saltRounds);
   return hash;
 };
-
-
-
-// const server = http.createServer((req, res) => {
-//     // Basic routing
-//     if (req.url === '/health') {
-//         res.writeHead(200, { 'Content-Type': 'application/json' });
-//         res.end(JSON.stringify({ status: 'ok' }));
-//         return;
-//     }
-
-//     // Default response
-//     res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
-//     res.end('Hello from Node.js!\n');
-// });
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/html/landing-page.html'))
@@ -207,7 +193,6 @@ app.get('/car', ensureLoggedIn, async (req, res) => {
   }
 });
 
-
 app.post('/car/:carId/note', ensureLoggedIn, async (req, res) => {
   const userId = req.session.userId;
   const carId = req.params.carId;
@@ -233,8 +218,6 @@ app.post('/car/:carId/note', ensureLoggedIn, async (req, res) => {
   }
 });
 
-
-
 app.post('/signup', async (req, res) => {
 
   const { username, email, password } = req.body;
@@ -253,8 +236,6 @@ app.post('/login', (req, res) => {
   const { email, password } = req.body;
   fetchsuser.fetchUser(req, email, password, res);
 })
-
-
 
 // Proxy endpoint for CarQuery
 app.get('/api/makes', async (req, res) => {
@@ -366,23 +347,9 @@ app.post('/ai_processor', async (req, res) => {
   res.end(JSON.stringify({ gpt_response: gpt_output }));
 });
 
+module.exports = app;
+// export default {app};
+
 app.listen(PORT, HOST, () => {
   console.log(`Server listening at http://${HOST}:${PORT}`);
 });
-
-// // Graceful shutdown
-// const shutdown = (signal) => {
-//     console.log(`Received ${signal}. Shutting down...`);
-//     app.close((err) => {
-//         if (err) {
-//             console.error('Error during shutdown:', err);
-//             process.exit(1);
-//         }
-//         process.exit(0);
-//     });
-// };
-
-// process.on('SIGINT', () => shutdown('SIGINT'));
-// process.on('SIGTERM', () => shutdown('SIGTERM'));
-
-

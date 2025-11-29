@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha \"tests/**/*.test.js\""
   },
   "author": "",
   "license": "ISC",
@@ -19,5 +19,11 @@
     "firebase-admin": "^13.5.0",
     "node": "^24.8.0",
     "openai": "^5.23.1"
+  },
+  "devDependencies": {
+    "chai": "^6.2.1",
+    "chromedriver": "^142.0.3",
+    "mocha": "^11.7.5",
+    "selenium-webdriver": "^4.38.0"
   }
 }

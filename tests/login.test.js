@@ -1,0 +1,67 @@
+const { Builder, By, until } = require("selenium-webdriver");
+const chrome = require("selenium-webdriver/chrome");
+require("chromedriver");
+
+describe("Login Page E2E Test", function () {
+    this.timeout(30000);
+    let driver;
+
+    before(async () => {
+        const options = new chrome.Options();
+        // options.addArguments("--headless"); // enable this for CI or silent mode
+        options.addArguments("--window-size=1920,1080");
+
+        driver = await new Builder()
+            .forBrowser("chrome")
+            .setChromeOptions(options)
+            .build();
+    });
+
+    after(async () => {
+        await driver.quit();
+    });
+
+    it("Should load the login page", async () => {
+        await driver.get("http://localhost:3000/login");
+
+        const heading = await driver.wait(
+            until.elementLocated(By.css("h3")),
+            5000
+        );
+
+        const text = await heading.getText();
+        if (text !== "Login") throw new Error("Login page heading incorrect");
+    });
+
+    it("Should fill the login form and attempt submit", async () => {
+        await driver.get("http://localhost:3000/login");
+
+        // Fill email
+        const emailInput = await driver.findElement(By.id("email"));
+        await emailInput.clear();
+        await emailInput.sendKeys("newnav@gmail.com");
+
+        // Fill password
+        const passInput = await driver.findElement(By.id("password"));
+        await passInput.clear();
+        await passInput.sendKeys("1234");
+
+        // Submit button
+        const submitBtn = await driver.findElement(By.css("button[type='submit']"));
+        await submitBtn.click();
+
+        // Wait for server to respond or page to update
+        await driver.sleep(1000); // adjust if you're doing async fetch in login.js
+
+        // Check if error message appeared
+        // let errorText = "";
+        // try {
+        //     const error = await driver.findElement(By.id("errorMsgText"));
+        //     errorText = await error.getText();
+        // } catch (e) {}
+        await driver.wait(until.urlContains('/home'), 5000);
+
+        // At this point, we only check behavior.
+        // You can change this to check redirect or validate errors.
+    });
+});
