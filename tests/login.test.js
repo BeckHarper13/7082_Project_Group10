@@ -9,8 +9,15 @@ describe("Login Page E2E Test", function () {
 
     before(async () => {
         const options = new chrome.Options();
-        // options.addArguments("--headless"); // enable this for CI or silent mode
-        options.addArguments("--window-size=1920,1080");
+        const headless = process.env.HEADLESS === "true";
+
+        if (headless) {
+            options.addArguments("--headless");
+            options.addArguments("--disable-gpu");
+            options.addArguments("--no-sandbox");
+        } else {
+            options.addArguments("--window-size=1920,1080");
+        }
 
         driver = await new Builder()
             .forBrowser("chrome")
@@ -51,6 +58,7 @@ describe("Login Page E2E Test", function () {
         const submitBtn = await driver.findElement(By.css("button[type='submit']"));
         await submitBtn.click();
     });
+
     it("Should load the correct users page", async () => {
         await driver.wait(until.urlContains('/home'), 10000);
         const url = await driver.getCurrentUrl();

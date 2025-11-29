@@ -2,6 +2,12 @@ const { expect } = require("chai");
 const { Builder, By, until } = require("selenium-webdriver");
 const chrome = require("selenium-webdriver/chrome");
 require("chromedriver");
+const testUtils = require("./test-utils");
+
+const invalidLoginStrings = {
+    invalidMissingEmail: "Invalid or missing email",
+    invalidEmailPassword: "Invalid email or password"
+}
 
 describe("Login Page E2E Test Fail Cases", function () {
     this.timeout(30000);
@@ -9,8 +15,15 @@ describe("Login Page E2E Test Fail Cases", function () {
 
     before(async () => {
         const options = new chrome.Options();
-        // options.addArguments("--headless"); // enable this for CI or silent mode
-        options.addArguments("--window-size=1920,1080");
+        const headless = process.env.HEADLESS === "true";
+
+        if (headless) {
+            options.addArguments("--headless");
+            options.addArguments("--disable-gpu");
+            options.addArguments("--no-sandbox");
+        } else {
+            options.addArguments("--window-size=1920,1080");
+        }
 
         driver = await new Builder()
             .forBrowser("chrome")
@@ -35,53 +48,38 @@ describe("Login Page E2E Test Fail Cases", function () {
     });
 
     it("Should not allow invalid emails", async () => {
-        await inputLoginInfo("email", "1234", driver);
+        await testUtils.inputLoginInfo("email", "1234", driver);
         const text = await waitForText(
             driver,
             By.id("errorMsgText"),
-            "Invalid or missing email",
+            invalidLoginStrings.invalidMissingEmail,
             5000
         );
-        expect(text).to.equal("Invalid or missing email");
+        expect(text).to.equal(invalidLoginStrings.invalidMissingEmail);
     });
 
     it("Should not allow unknown emails to login", async () => {
-        await inputLoginInfo("email@email.ca", "1234", driver);
+        await testUtils.inputLoginInfo("email@email.ca", "1234", driver);
         const text = await waitForText(
             driver,
             By.id("errorMsgText"),
-            "Invalid email or password",
+            invalidLoginStrings.invalidEmailPassword,
             5000
         );
-        expect(text).to.equal("Invalid email or password");
+        expect(text).to.equal(invalidLoginStrings.invalidEmailPassword);
     });
 
     it("Should not allow login with correct email and incorrect password", async () => {
-        await inputLoginInfo("newnav@gmail.com", "12345", driver);
+        await testUtils.inputLoginInfo("newnav@gmail.com", "12345", driver);
         const text = await waitForText(
             driver,
             By.id("errorMsgText"),
-            "Invalid email or password",
+            invalidLoginStrings.invalidEmailPassword,
             5000
         );
-        expect(text).to.equal("Invalid email or password");
+        expect(text).to.equal(invalidLoginStrings.invalidEmailPassword);
     });
 });
-
-async function inputLoginInfo(email, password, driver) {
-    await driver.get("http://localhost:3000/login");
-
-    const emailInput = await driver.findElement(By.id("email"));
-    await emailInput.clear();
-    await emailInput.sendKeys(email);
-
-    const passInput = await driver.findElement(By.id("password"));
-    await passInput.clear();
-    await passInput.sendKeys(password);
-
-    const submitBtn = await driver.findElement(By.css("button[type='submit']"));
-    await submitBtn.click();
-}
 
 async function waitForText(driver, locator, expectedText, timeout = 5000) {
     // Wait until element exists
