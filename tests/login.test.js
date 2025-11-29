@@ -1,28 +1,13 @@
 const { expect } = require("chai");
 const { Builder, By, until } = require("selenium-webdriver");
-const chrome = require("selenium-webdriver/chrome");
-require("chromedriver");
+const testUtils = require("./test-utils");
 
 describe("Login Page E2E Test", function () {
     this.timeout(30000);
     let driver;
 
     before(async () => {
-        const options = new chrome.Options();
-        const headless = process.env.HEADLESS === "true";
-
-        if (headless) {
-            options.addArguments("--headless");
-            options.addArguments("--disable-gpu");
-            options.addArguments("--no-sandbox");
-        } else {
-            options.addArguments("--window-size=1920,1080");
-        }
-
-        driver = await new Builder()
-            .forBrowser("chrome")
-            .setChromeOptions(options)
-            .build();
+        driver = await testUtils.createBrowser();
     });
 
     after(async () => {

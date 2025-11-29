@@ -1,4 +1,6 @@
 const { Builder, By, until } = require("selenium-webdriver");
+const chrome = require("selenium-webdriver/chrome");
+require("chromedriver");
 
 async function inputLoginInfo(email, password, driver) {
     await driver.get("http://localhost:3000/login");
@@ -15,4 +17,24 @@ async function inputLoginInfo(email, password, driver) {
     await submitBtn.click();
 }
 
-module.exports = { inputLoginInfo };
+async function createBrowser() {
+    const options = new chrome.Options();
+    const headless = process.env.HEADLESS === "true";
+
+    if (headless) {
+        options.addArguments("--headless");
+        options.addArguments("--disable-gpu");
+        options.addArguments("--no-sandbox");
+    } else {
+        options.addArguments("--window-size=1920,1080");
+    }
+
+    driver = await new Builder()
+        .forBrowser("chrome")
+        .setChromeOptions(options)
+        .build();
+
+    return driver;
+}
+
+module.exports = { inputLoginInfo, createBrowser };
