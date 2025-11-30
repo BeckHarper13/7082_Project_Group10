@@ -196,11 +196,11 @@ app.post('/car/:carId/note', ensureLoggedIn, async (req, res) => {
   const userId = req.session.userId;
   const carId = req.params.carId;
   const { notes } = req.body;
+  const notesText = notes.trim();
 
-  if (!notes || !carId) {
-    return res.status(400).send("Missing notes or carId");
+  if (!carId) {
+    return res.status(400).send("Missing carId");
   }
-
   try {
     const carRef = db
       .collection('users')
@@ -208,7 +208,7 @@ app.post('/car/:carId/note', ensureLoggedIn, async (req, res) => {
       .collection('cars')
       .doc(carId);
 
-    await carRef.update({ notes });
+    await carRef.update({ notes : notesText });
 
     res.status(200).send("Notes saved.");
   } catch (err) {
