@@ -56,6 +56,7 @@ describe("Login Page E2E Test", function () {
 
     it("Should logout the user", async () => {
         await driver.wait(until.elementLocated(By.id("menuBtn")), 10000).click();
+        await driver.sleep(500);
         const logoutForm = await driver.wait(until.elementLocated(By.css('form[action="/logout"]')), 10000);
         const logoutBtn = await logoutForm.findElement(By.css("button"));
         await logoutBtn.click();

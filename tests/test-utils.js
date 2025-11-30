@@ -23,9 +23,10 @@ async function createBrowser() {
 
     if (headless) {
         options.addArguments("--headless");
-    } else {
-        options.addArguments("--window-size=1920,1080");
-    }
+        options.addArguments("--disable-gpu");    // Recommended
+    } 
+    
+    options.addArguments("--window-size=1920,1080");
 
     driver = await new Builder()
         .forBrowser("chrome")

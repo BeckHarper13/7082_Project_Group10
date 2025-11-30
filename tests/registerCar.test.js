@@ -66,6 +66,7 @@ describe("Register Car E2E Test", function () {
         const parent = await elem.findElement(By.xpath(".."));
         await driver.sleep(500);
         await parent.click();
+        await driver.sleep(500);
 
         const pTags = await driver.wait(until.elementsLocated(By.css("p")), 10000);
         let foundCarInfo = false;
@@ -78,7 +79,8 @@ describe("Register Car E2E Test", function () {
             }
         }
         if (!foundCarInfo) {
-            expect(carInfo).to.equal("");
+            const txt = await pTags[0].getText();
+            expect(carInfo).to.equal(txt);
         }
     });
 
