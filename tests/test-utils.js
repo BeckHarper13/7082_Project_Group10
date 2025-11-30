@@ -23,8 +23,6 @@ async function createBrowser() {
 
     if (headless) {
         options.addArguments("--headless");
-        options.addArguments("--disable-gpu");
-        options.addArguments("--no-sandbox");
     } else {
         options.addArguments("--window-size=1920,1080");
     }

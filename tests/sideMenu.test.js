@@ -2,7 +2,7 @@ const { expect } = require("chai");
 const { Builder, By, until } = require("selenium-webdriver");
 const testUtils = require("./test-utils");
 
-describe("Register Car E2E Test", function () {
+describe("Side Menu E2E Tests", function () {
     this.timeout(30000);
     let driver;
 
