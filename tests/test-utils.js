@@ -31,6 +31,7 @@ async function createBrowser() {
         .forBrowser("chrome")
         .setChromeOptions(options)
         .build();
+    await driver.manage().window().maximize();
 
     return driver;
 }
