@@ -52,8 +52,5 @@ describe("Login Page E2E Test", function () {
         const nameH3 = await driver.wait(until.elementLocated(By.xpath("//h3[1]")), 10000);
         const nameText = await nameH3.getText();
         expect(nameText).to.equal("Welcome back unco");
-
-        await driver.sleep(2000);
-
     })
 });
