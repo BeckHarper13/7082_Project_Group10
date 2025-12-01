@@ -42,6 +42,7 @@ describe("Car Page E2E Tests", function () {
 
     it("Should load car page when account car card clicked", async () => {
         await driver.wait(until.elementLocated(By.id("menuBtn")), 10000).click();
+        await driver.sleep(500);
         await driver.wait(until.elementLocated(By.css('a[href="/account"]')), 10000).click();
 
         await driver.wait(until.urlContains('/account'), 10000);

@@ -17,7 +17,7 @@ describe("Side Menu E2E Tests", function () {
 
     it("Should open the account page", async () => {
         await driver.wait(until.elementLocated(By.id("menuBtn")), 10000).click();
-
+        await driver.sleep(500);
         await driver.wait(until.elementLocated(By.css('a[href="/account"]')), 10000).click();
 
         await driver.wait(until.urlContains('/account'), 10000);
@@ -35,7 +35,7 @@ describe("Side Menu E2E Tests", function () {
 
     it("Should open the car registration page", async () => {
         await driver.wait(until.elementLocated(By.id("menuBtn")), 10000).click();
-
+        await driver.sleep(500);
         await driver.wait(until.elementLocated(By.css('a[href="/search"]')), 10000).click();
 
         await driver.wait(until.urlContains('/search'), 10000);
@@ -49,7 +49,7 @@ describe("Side Menu E2E Tests", function () {
 
     it ("Should open the home page", async () => {
         await driver.wait(until.elementLocated(By.id("menuBtn")), 10000).click();
-
+        await driver.sleep(500);
         await driver.wait(until.elementLocated(By.css('a[href="/home"]')), 10000).click();
 
         await driver.wait(until.urlContains('/home'), 10000);
