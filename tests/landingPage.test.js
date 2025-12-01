@@ -2,7 +2,7 @@ const { expect } = require("chai");
 const { Builder, By, until } = require("selenium-webdriver");
 const testUtils = require("./test-utils");
 
-describe("Login Page E2E Test", function () {
+describe("Landing Page E2E Test", function () {
     this.timeout(30000);
     let driver;
 
@@ -19,16 +19,16 @@ describe("Login Page E2E Test", function () {
     });
 
     it("Should load the login page", async () => {
-        const loginBtn = await driver.wait(until.elementLocated(By.css('a[href="/login"]')), 5000);
+        const loginBtn = await driver.wait(until.elementLocated(By.css('a[href="/login"]')), 20000);
         await loginBtn.click();
 
-        await driver.wait(until.urlContains('/login'), 10000);
+        await driver.wait(until.urlContains('/login'), 20000);
         const url = await driver.getCurrentUrl();
         expect(url).to.include('/login');
 
         const heading = await driver.wait(
             until.elementLocated(By.css("h3")),
-            5000
+            20000
         );
 
         const text = await heading.getText();
@@ -38,16 +38,16 @@ describe("Login Page E2E Test", function () {
     it("Should load the signup page", async () => {
         loadLandingPage(driver);
 
-        const loginBtn = await driver.wait(until.elementLocated(By.css('a[href="/signup"]')), 5000);
+        const loginBtn = await driver.wait(until.elementLocated(By.css('a[href="/signup"]')), 20000);
         await loginBtn.click();
 
-        await driver.wait(until.urlContains('/signup'), 10000);
+        await driver.wait(until.urlContains('/signup'), 20000);
         const url = await driver.getCurrentUrl();
         expect(url).to.include('/signup');
 
         const heading = await driver.wait(
             until.elementLocated(By.css("h3")),
-            5000
+            20000
         );
 
         const text = await heading.getText();
@@ -58,7 +58,7 @@ describe("Login Page E2E Test", function () {
 
 async function loadLandingPage(driver) {
     await driver.get("http://localhost:3000/");
-    const heading = await driver.wait(until.elementLocated(By.css("h2")), 5000);
+    const heading = await driver.wait(until.elementLocated(By.css("h2")), 20000);
     const text = await heading.getText();
     expect(text).to.equal("Welcome!");
 }

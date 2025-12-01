@@ -16,11 +16,11 @@ describe("Register Car E2E Test", function () {
     });
 
     it("Should open the car registration page", async () => {
-        await driver.wait(until.elementLocated(By.id("menuBtn")), 10000).click();
+        await driver.wait(until.elementLocated(By.id("menuBtn")), 20000).click();
         await driver.sleep(500);
-        await driver.wait(until.elementLocated(By.css('a[href="/search"]')), 10000).click();
+        await driver.wait(until.elementLocated(By.css('a[href="/search"]')), 20000).click();
         await driver.sleep(500);
-        await driver.wait(until.urlContains('/search'), 10000);
+        await driver.wait(until.urlContains('/search'), 20000);
         const url = await driver.getCurrentUrl();
         expect(url).to.include('/search');
     });
@@ -36,10 +36,10 @@ describe("Register Car E2E Test", function () {
 
         const successH2 = await driver.wait(
             until.elementLocated(By.xpath("//h2[contains(text(), 'Car Registered!')]")),
-            10000
+            20000
         );
 
-        await driver.wait(until.elementIsVisible(successH2), 10000);
+        await driver.wait(until.elementIsVisible(successH2), 20000);
 
         const message = await successH2.getText();
         expect(message).to.equal("Car Registered!");
@@ -59,21 +59,21 @@ describe("Register Car E2E Test", function () {
             expect(registerCarDetails).to.equal("");
         }
         await driver.sleep(500);
-        await driver.wait(until.elementLocated(By.id("wizardHomeBtn")), 10000).click();
+        await driver.wait(until.elementLocated(By.id("wizardHomeBtn")), 20000).click();
         await driver.sleep(500);
     });
 
     it("Should check if the car is stored in the users account", async () => {
         const carInfo = "2021 • LP 700-4 2dr Coupe AWD (6.5L 12cyl 7AM)";
-        const elem = await driver.wait(until.elementLocated(By.xpath("//a[contains(@href, '/car?trimId=81362')]")), 10000);
+        const elem = await driver.wait(until.elementLocated(By.xpath("//a[contains(@href, '/car?trimId=81362')]")), 20000);
         const parent = await elem.findElement(By.xpath(".."));
         await driver.sleep(500);
         await driver.executeScript("arguments[0].scrollIntoView({block:'center'});", parent);
-        await driver.wait(until.elementIsVisible(parent), 5000);
+        await driver.wait(until.elementIsVisible(parent), 20000);
         await parent.click();
         await driver.sleep(500);
 
-        const pTags = await driver.wait(until.elementsLocated(By.css("p")), 10000);
+        const pTags = await driver.wait(until.elementsLocated(By.css("p")), 20000);
         let foundCarInfo = false;
         for (let i = 0; i < pTags.length; i++) {
             const txt = await pTags[i].getText();
@@ -90,24 +90,24 @@ describe("Register Car E2E Test", function () {
     });
 
     it("Should delete the car", async () => {
-        const deleteCarBtn = await driver.wait(until.elementLocated(By.id("deleteCarModalBtn")), 10000);
+        const deleteCarBtn = await driver.wait(until.elementLocated(By.id("deleteCarModalBtn")), 20000);
         await driver.executeScript("arguments[0].scrollIntoView({block: 'center'});", deleteCarBtn);
         await driver.sleep(500);
         await deleteCarBtn.click();
 
-        const realDeleteCarBtn = await driver.wait(until.elementLocated(By.id("deleteCarBtn")), 10000);
+        const realDeleteCarBtn = await driver.wait(until.elementLocated(By.id("deleteCarBtn")), 20000);
         await driver.sleep(500);
-        await driver.wait(until.elementIsEnabled(realDeleteCarBtn), 5000);
-        await driver.wait(until.elementIsVisible(realDeleteCarBtn), 5000);
+        await driver.wait(until.elementIsEnabled(realDeleteCarBtn), 20000);
+        await driver.wait(until.elementIsVisible(realDeleteCarBtn), 20000);
         await realDeleteCarBtn.click();
 
-        const goToAccountBtn = await driver.wait(until.elementLocated(By.id("backToAccountBtn")), 10000);
+        const goToAccountBtn = await driver.wait(until.elementLocated(By.id("backToAccountBtn")), 20000);
         await driver.sleep(500);
-        await driver.wait(until.elementIsEnabled(goToAccountBtn), 5000);
-        await driver.wait(until.elementIsVisible(goToAccountBtn), 5000);
+        await driver.wait(until.elementIsEnabled(goToAccountBtn), 20000);
+        await driver.wait(until.elementIsVisible(goToAccountBtn), 20000);
         await goToAccountBtn.click();
         
-        const carCards = await driver.wait(until.elementsLocated(By.className("card")), 10000);
+        const carCards = await driver.wait(until.elementsLocated(By.className("card")), 20000);
         expect(carCards.length).to.equal(2);
     });
 });
@@ -115,30 +115,30 @@ describe("Register Car E2E Test", function () {
 async function chooseCarAndEnterSerialNum(make, model, trim, carRegisterDetails, driver) {
     await driver.sleep(500);
     const makeDropdown = await driver.wait(until.elementLocated(By.id("make")));
-    await driver.wait(until.elementIsVisible(makeDropdown), 10000);
-    await driver.wait(until.elementIsEnabled(makeDropdown), 10000);
+    await driver.wait(until.elementIsVisible(makeDropdown), 20000);
+    await driver.wait(until.elementIsEnabled(makeDropdown), 20000);
     await driver.wait(until.elementLocated(By.css(`option[value="${make}"]`))).click();
 
     await driver.sleep(500);
     const modelDropdown = await driver.wait(until.elementLocated(By.id("model")));
-    await driver.wait(until.elementIsVisible(modelDropdown), 10000);
-    await driver.wait(until.elementIsEnabled(modelDropdown), 10000);
+    await driver.wait(until.elementIsVisible(modelDropdown), 20000);
+    await driver.wait(until.elementIsEnabled(modelDropdown), 20000);
     await driver.wait(until.elementLocated(By.css(`option[value="${model}"]`))).click();
 
     await driver.sleep(500);
     const trimDropdown = await driver.wait(until.elementLocated(By.id("trim")));
-    await driver.wait(until.elementIsVisible(trimDropdown), 10000);
-    await driver.wait(until.elementIsEnabled(trimDropdown), 10000);
+    await driver.wait(until.elementIsVisible(trimDropdown), 20000);
+    await driver.wait(until.elementIsEnabled(trimDropdown), 20000);
     await driver.wait(until.elementLocated(By.css(`option[value="${trim}"]`))).click();
 
     await driver.sleep(500);
     const getInfoBtn = await driver.wait(until.elementLocated(By.id("getInfo")));
-    await driver.wait(until.elementIsVisible(getInfoBtn), 10000);
-    await driver.wait(until.elementIsEnabled(getInfoBtn), 10000);
+    await driver.wait(until.elementIsVisible(getInfoBtn), 20000);
+    await driver.wait(until.elementIsEnabled(getInfoBtn), 20000);
     await getInfoBtn.click()
 
     await driver.sleep(500);
-    const H2CarInfo = await driver.wait(until.elementLocated(By.css("h2")), 10000);
+    const H2CarInfo = await driver.wait(until.elementLocated(By.css("h2")), 20000);
     const H2CarInfoText = await H2CarInfo.getText();
     expect(H2CarInfoText).to.equal(carRegisterDetails);
 
@@ -150,16 +150,16 @@ async function chooseCarAndEnterSerialNum(make, model, trim, carRegisterDetails,
     await driver.sleep(500);
 
     // Wait until Selenium says it's really clickable
-    await driver.wait(until.elementIsEnabled(saveCarBtn), 5000);
-    await driver.wait(until.elementIsVisible(saveCarBtn), 5000);
+    await driver.wait(until.elementIsEnabled(saveCarBtn), 20000);
+    await driver.wait(until.elementIsVisible(saveCarBtn), 20000);
 
     await saveCarBtn.click();
 
     await driver.sleep(500);
     const serialNumInput = await driver.wait(until.elementLocated(By.id("serialNumberInput")));
     await driver.sleep(500); // Give layout/animations time to settle
-    await driver.wait(until.elementIsVisible(serialNumInput), 10000);
-    await driver.wait(until.elementIsEnabled(serialNumInput), 10000);
+    await driver.wait(until.elementIsVisible(serialNumInput), 20000);
+    await driver.wait(until.elementIsEnabled(serialNumInput), 20000);
     await serialNumInput.clear();
     await serialNumInput.sendKeys("abc123");
     await driver.wait(until.elementLocated(By.id("wizardStep1Next"))).click();

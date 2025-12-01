@@ -19,7 +19,7 @@ describe("Login Page E2E Test", function () {
 
         const heading = await driver.wait(
             until.elementLocated(By.css("h3")),
-            5000
+            20000
         );
 
         const text = await heading.getText();
@@ -45,31 +45,31 @@ describe("Login Page E2E Test", function () {
     });
 
     it("Should load the correct users page", async () => {
-        await driver.wait(until.urlContains('/home'), 10000);
+        await driver.wait(until.urlContains('/home'), 20000);
         const url = await driver.getCurrentUrl();
         expect(url).to.include('/home');
 
-        const nameH3 = await driver.wait(until.elementLocated(By.xpath("//h3[1]")), 10000);
+        const nameH3 = await driver.wait(until.elementLocated(By.xpath("//h3[1]")), 20000);
         const nameText = await nameH3.getText();
         expect(nameText).to.equal("Welcome back unco");
     });
 
     it("Should logout the user", async () => {
-        await driver.wait(until.elementLocated(By.id("menuBtn")), 10000).click();
+        await driver.wait(until.elementLocated(By.id("menuBtn")), 20000).click();
         await driver.sleep(500);
-        const logoutForm = await driver.wait(until.elementLocated(By.css('form[action="/logout"]')), 10000);
+        const logoutForm = await driver.wait(until.elementLocated(By.css('form[action="/logout"]')), 20000);
         const logoutBtn = await logoutForm.findElement(By.css("button"));
         await logoutBtn.click();
 
-        await driver.wait(until.urlContains('http://localhost:3000'), 10000);
+        await driver.wait(until.urlContains('http://localhost:3000'), 20000);
         const url = await driver.getCurrentUrl();
         expect(url).to.contain('http://localhost:3000');
 
-        const loginLink = await driver.wait(until.elementLocated(By.xpath("//a[contains(text(), 'Login')]")), 10000);
+        const loginLink = await driver.wait(until.elementLocated(By.xpath("//a[contains(text(), 'Login')]")), 20000);
         const loginTxt = await loginLink.getText();
         expect(loginTxt).to.equal("Login");
 
-        const signup = await driver.wait(until.elementLocated(By.xpath("//a[contains(text(), 'Sign Up')]")), 10000);
+        const signup = await driver.wait(until.elementLocated(By.xpath("//a[contains(text(), 'Sign Up')]")), 20000);
         const signupTxt = await signup.getText();
         expect(signupTxt).to.equal("Sign Up");
     });

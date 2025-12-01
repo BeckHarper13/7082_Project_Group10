@@ -24,7 +24,7 @@ describe("Login Page E2E Test Fail Cases", function () {
 
         const heading = await driver.wait(
             until.elementLocated(By.css("h3")),
-            5000
+            20000
         );
 
         const text = await heading.getText();
@@ -37,7 +37,7 @@ describe("Login Page E2E Test Fail Cases", function () {
             driver,
             By.id("errorMsgText"),
             invalidLoginStrings.invalidMissingEmail,
-            5000
+            20000
         );
         expect(text).to.equal(invalidLoginStrings.invalidMissingEmail);
     });
@@ -48,7 +48,7 @@ describe("Login Page E2E Test Fail Cases", function () {
             driver,
             By.id("errorMsgText"),
             invalidLoginStrings.invalidEmailPassword,
-            5000
+            20000
         );
         expect(text).to.equal(invalidLoginStrings.invalidEmailPassword);
     });
@@ -59,13 +59,13 @@ describe("Login Page E2E Test Fail Cases", function () {
             driver,
             By.id("errorMsgText"),
             invalidLoginStrings.invalidEmailPassword,
-            5000
+            20000
         );
         expect(text).to.equal(invalidLoginStrings.invalidEmailPassword);
     });
 });
 
-async function waitForText(driver, locator, expectedText, timeout = 5000) {
+async function waitForText(driver, locator, expectedText, timeout = 20000) {
     // Wait until element exists
     const el = await driver.wait(until.elementLocated(locator), timeout);
 

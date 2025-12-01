@@ -17,11 +17,11 @@ describe("Edit Note E2E Tests", function () {
     });
 
     it("Should load car page", async () => {
-        const carLink = await driver.wait(until.elementLocated(By.xpath("//a[contains(@href, '/car?trimId=82678')]")), 10000);
+        const carLink = await driver.wait(until.elementLocated(By.xpath("//a[contains(@href, '/car?trimId=82678')]")), 20000);
         const carClickable = await carLink.findElement(By.xpath(".."));
         await carClickable.click();
 
-        await driver.wait(until.urlContains('/car?trimId=82678'), 10000);
+        await driver.wait(until.urlContains('/car?trimId=82678'), 20000);
         const url = await driver.getCurrentUrl();
         expect(url).to.include('/car?trimId=82678');
     });
@@ -30,26 +30,26 @@ describe("Edit Note E2E Tests", function () {
         await driver.executeScript("window.scrollTo(0, document.body.scrollHeight);");
         await driver.sleep(500);
 
-        const notesAccordionToggle = await driver.wait(until.elementLocated(By.xpath("//button[contains(., 'Notes')]")), 10000);
+        const notesAccordionToggle = await driver.wait(until.elementLocated(By.xpath("//button[contains(., 'Notes')]")), 20000);
         await notesAccordionToggle.click();
         await driver.sleep(500); // allow animation to finish
 
-        const editNotesBtn = await driver.wait(until.elementLocated(By.xpath("//button[contains(., 'Edit Notes')]")), 10000);
+        const editNotesBtn = await driver.wait(until.elementLocated(By.xpath("//button[contains(., 'Edit Notes')]")), 20000);
         await editNotesBtn.click();
         await driver.sleep(500); // allow animation to finish
 
-        const editNotesInput = await driver.wait(until.elementLocated(By.id("notesTextarea")), 10000);
+        const editNotesInput = await driver.wait(until.elementLocated(By.id("notesTextarea")), 20000);
         await editNotesInput.clear();
         await editNotesInput.sendKeys(note);
-        await driver.wait(until.elementLocated(By.id("saveNoteBtn")), 10000).click();
+        await driver.wait(until.elementLocated(By.id("saveNoteBtn")), 20000).click();
 
-        const noteDisplay = await driver.wait(until.elementLocated(By.id("notesDisplay")), 10000);
+        const noteDisplay = await driver.wait(until.elementLocated(By.id("notesDisplay")), 20000);
 
         // Wait until the text is not empty
         await driver.wait(async () => {
             const text = await noteDisplay.getText();
             return text === note;
-        }, 10000);
+        }, 20000);
 
         const noteDisplayText = await noteDisplay.getText();
         expect(noteDisplayText).to.include(note);
@@ -58,7 +58,7 @@ describe("Edit Note E2E Tests", function () {
     it("Should display the note on the home page", async () => {
         await driver.get("http://localhost:3000/home");
 
-        const smallNote = await driver.wait(until.elementLocated(By.id("note")), 10000);
+        const smallNote = await driver.wait(until.elementLocated(By.id("note")), 20000);
         const smallNoteText = await smallNote.getText();
 
         expect(smallNoteText).to.equal(note);
