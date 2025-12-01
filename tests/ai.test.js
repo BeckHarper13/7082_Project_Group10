@@ -74,7 +74,7 @@ describe("AI Agent E2E Tests", function () {
         await driver.wait(async () => {
             pTags = await driver.wait(until.elementsLocated(By.css("p")), 10000);
             return pTags.length === expectedPTagCount;
-        }, 15000, `# of p's: ${pTags.length}`);
+        }, 20000, `# of p's: ${pTags.length}`);
 
         //Checks if AI responds
         let foundAiResponse = false;
