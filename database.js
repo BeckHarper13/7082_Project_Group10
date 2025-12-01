@@ -14,7 +14,7 @@ function initializeFirestore() {
         return admin.firestore();
     }
 
-    // Local mode → use real service account
+    // Local mode use real service account
     console.log("🔐 Using LOCAL real Firestore credentials");
 
     const serviceAccount = require("./serviceAccountKey.json");
