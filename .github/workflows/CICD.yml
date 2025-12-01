@@ -19,6 +19,13 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+      
+      - name: Write Firebase key
+        run: |
+          echo "$SERVICE_ACCOUNT_KEY" > ./serviceAccountKey.json
+          ls -l
+        env:
+          SERVICE_ACCOUNT_KEY: ${{ secrets.SERVICE_ACCOUNT_KEY }}
 
       - name: Install Chrome
         uses: browser-actions/setup-chrome@v1
