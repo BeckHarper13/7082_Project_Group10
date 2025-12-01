@@ -3,8 +3,6 @@ name: Run Selenium Tests
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]   # (Optional) Run tests on PRs into main
 
 jobs:
   test:
@@ -28,8 +26,12 @@ jobs:
       - name: Start backend server
         run: |
           nohup node index.js &
-
-      - name: Run tests (headless)
+          sleep 5   # give server time to start
+      
+      - name: Show server logs
+        run: cat nohup.out || true
+      
+      - name: Run Selenium tests (headless)
         env:
           HEADLESS: "true"
         run: npm run test:headless
