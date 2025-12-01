@@ -1,12 +1,35 @@
-name: Empty CI/CD
+name: Run Selenium Tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]   # (Optional) Run tests on PRs into main
 
 jobs:
-  do-nothing:
+  test:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Say hello
-        run: echo "Hello CI/CD — this workflow does nothing"
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Start backend server
+        run: |
+          nohup node index.js &
+
+      - name: Run tests (headless)
+        env:
+          HEADLESS: "true"
+        run: npm run test:headless
