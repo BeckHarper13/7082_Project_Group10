@@ -1,36 +1,29 @@
-const { initializeApp } = require('firebase/app');
-const { getFirestore } = require('firebase/firestore');
-const dotenv = require("dotenv");
-dotenv.config();
+// database.js (CI-safe Firestore config)
+const admin = require("firebase-admin");
 
+function initializeFirestore() {
+    // CI mode → use Firestore Emulator
+    if (process.env.CI === "true") {
+        console.log("🔥 Running Firestore in EMULATOR MODE");
 
-const admin = require('firebase-admin');
-const path = require('path');
+        admin.initializeApp({
+            projectId: "demo-test-project" // any fake ID
+        });
 
-// Load service account JSON
-const serviceAccount = require(path.join(__dirname, 'serviceAccountKey.json'));
+        process.env.FIRESTORE_EMULATOR_HOST = "localhost:8080";
+        return admin.firestore();
+    }
 
-// Initialize Admin SDK
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
+    // Local mode → use real service account
+    console.log("🔐 Using LOCAL real Firestore credentials");
 
-// // TODO: Replace with your Firebase project configuration
-// const firebaseConfig = {
-//   apiKey: process.env.FIREBASE_API_KEY,
-//   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-//   projectId: process.env.FIREBASE_PROJECT_ID,
-//   storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-//   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-//   appId: process.env.FIREBASE_APP_ID
-// };
+    const serviceAccount = require("./serviceAccountKey.json");
 
-// // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
+    admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount)
+    });
 
-// // Initialize Firestore Database
-// const db = getFirestore(app);
+    return admin.firestore();
+}
 
-const db = admin.firestore();
-
-module.exports = db;
+module.exports = initializeFirestore();

@@ -1,0 +1,29 @@
+{
+  "users/user_1": {
+    "fields": {
+      "createdAt": { "timestampValue": "2025-11-22T22:43:02Z" },
+      "email": { "stringValue": "newnav@gmail.com" },
+      "passwordHash": { "stringValue": "'$2b$10$J4DXMs/UTlNlMoBIgIN9PO.7HTdFXNPlODkAtjlFEuM6iuNJ7PWBW'" },
+      "username": { "stringValue": "unco" }
+    }
+  },
+    "users/user_1/cars/car_1": {
+    "fields": {
+      "createdAt": { "timestampValue": "2025-11-22T23:00:00Z" },
+      "make": { "stringValue": "audi" },
+      "model": { "stringValue": "RS 7" },
+      "notes": { "stringValue": "Hello World: 919" },
+      "trimId": { "stringValue": "82678" }
+    }
+  },
+
+  "users/user_1/cars/car_2": {
+    "fields": {
+      "createdAt": { "timestampValue": "2025-11-22T23:05:00Z" },
+      "make": { "stringValue": "mercedes-benz" },
+      "model": { "stringValue": "SLR McLaren" },
+      "notes": { "stringValue": "" },
+      "trimId": { "stringValue": "24894" }
+    }
+  }
+}
