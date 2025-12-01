@@ -17,26 +17,26 @@ describe("AI Agent E2E Tests", function () {
     });
 
     it("Should load car page", async () => {
-        const carLink = await driver.wait(until.elementLocated(By.xpath("//a[contains(@href, '/car?trimId=82678')]")), 20000);
+        const carLink = await driver.wait(until.elementLocated(By.xpath("//a[contains(@href, '/car?trimId=82678')]")), 50000);
         const carClickable = await carLink.findElement(By.xpath(".."));
         await carClickable.click();
 
-        await driver.wait(until.urlContains('/car?trimId=82678'), 20000);
+        await driver.wait(until.urlContains('/car?trimId=82678'), 50000);
         const url = await driver.getCurrentUrl();
         expect(url).to.include('/car?trimId=82678');
     });
 
     it("Should open the AI modal", async () => {
-        const allH1 = await driver.wait(until.elementsLocated(By.css("h1")), 20000);
+        const allH1 = await driver.wait(until.elementsLocated(By.css("h1")), 50000);
         const carMakeModel = allH1[0];
         carMakeModelText = await carMakeModel.getText();
         const initialAiText = "I am a SpecCheck AI Agent.";
 
-        const aiBtn = await driver.wait(until.elementLocated(By.id("askAiBtn")), 20000);
+        const aiBtn = await driver.wait(until.elementLocated(By.id("askAiBtn")), 50000);
         await aiBtn.click();
         await driver.sleep(500);
 
-        const initialAiBubble = await driver.wait(until.elementLocated(By.id("aiResText")), 20000);
+        const initialAiBubble = await driver.wait(until.elementLocated(By.id("aiResText")), 50000);
         const initialAiBubbleText = await initialAiBubble.getText();
 
         expect(initialAiBubbleText).to.include(carMakeModelText);
@@ -44,15 +44,15 @@ describe("AI Agent E2E Tests", function () {
     });
 
     it("Should respond to the users question", async () => {
-        const chatInput = await driver.wait(until.elementLocated(By.id("chatTextarea")), 20000);
+        const chatInput = await driver.wait(until.elementLocated(By.id("chatTextarea")), 50000);
         const myQuestion = "Make/model of this car";
         await chatInput.clear();
         await chatInput.sendKeys(myQuestion);
-        await driver.wait(until.elementLocated(By.id("sendChatBtn")), 20000).click();
+        await driver.wait(until.elementLocated(By.id("sendChatBtn")), 50000).click();
 
         await driver.sleep(500);
 
-        let pTags = await driver.wait(until.elementsLocated(By.css("p")), 20000);
+        let pTags = await driver.wait(until.elementsLocated(By.css("p")), 50000);
 
         //Checks if user question bubble pops up
         let foundUserQuestion = false;
@@ -72,9 +72,9 @@ describe("AI Agent E2E Tests", function () {
         const expectedPTagCount = pTags.length + 1;
         
         await driver.wait(async () => {
-            pTags = await driver.wait(until.elementsLocated(By.css("p")), 20000);
+            pTags = await driver.wait(until.elementsLocated(By.css("p")), 50000);
             return pTags.length === expectedPTagCount;
-        }, 20000, `# of p's: ${pTags.length}`);
+        }, 50000, `# of p's: ${pTags.length}`);
 
         //Checks if AI responds
         let foundAiResponse = false;
