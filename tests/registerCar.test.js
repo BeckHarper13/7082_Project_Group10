@@ -68,6 +68,8 @@ describe("Register Car E2E Test", function () {
         const elem = await driver.wait(until.elementLocated(By.xpath("//a[contains(@href, '/car?trimId=81362')]")), 10000);
         const parent = await elem.findElement(By.xpath(".."));
         await driver.sleep(500);
+        await driver.executeScript("arguments[0].scrollIntoView({block:'center'});", parent);
+        await driver.wait(until.elementIsVisible(parent), 5000);
         await parent.click();
         await driver.sleep(500);
 
