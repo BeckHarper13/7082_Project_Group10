@@ -51,13 +51,6 @@ app.use(express.json());
 const HOST = process.env.HOST || 'localhost';
 const PORT = parseInt(process.env.PORT || '3000', 10);
 
-// Hashing
-const hashPassword = async (plainPassword) => {
-  const saltRounds = 10; // higher = more secure, but slower
-  const hash = await bcrypt.hash(plainPassword, saltRounds);
-  return hash;
-};
-
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/html/landing-page.html'))
 })
@@ -221,7 +214,10 @@ app.post('/signup', async (req, res) => {
 
   const { username, email, password } = req.body;
   try {
-    passwordHash = await hashPassword(password);
+    passwordHash = await fetchsuser.hashPassword(password);
+    if (passwordHash === null) {
+      return res.status(400).send("Password must be at least 4 characters");
+    }
   } catch (err) {
     console.error("Error hashing password", err);
     return res.status(500).send("Internal server error");

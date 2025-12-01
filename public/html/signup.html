@@ -27,9 +27,9 @@
                     <label for="username" class="form-label">Username</label>
                     <!-- allow letters, numbers and underscores, min length 3 -->
                     <input type="text" class="form-control" id="username" name="username" required
-                           pattern="^[A-Za-z0-9_ ]{3,}$" title="Use letters, numbers or underscores; at least 3 characters">
+                           pattern="^[A-Za-z0-9_ ]+$" title="Use letters, numbers or underscores; at least 3 characters">
                     <div class="invalid-feedback">
-                        Username is required and must be at least 3 characters (letters, numbers, or underscores).
+                        Username is required and can have letters, numbers, or underscores.
                     </div>
                 </div>
 

@@ -108,6 +108,16 @@ async function saveUser(req, username, email, passwordHash, res) {
     }
 }
 
+// Hashing
+const hashPassword = async (plainPassword) => {
+    if (plainPassword.trim().length < 4) {
+        return null;
+    }
+    const saltRounds = 10; // higher = more secure, but slower
+    const hash = await bcrypt.hash(plainPassword, saltRounds);
+    return hash;
+};
+
 async function getUserandCars(username) {
     try {
         if (!username || typeof username !== 'string' || !username.trim()) {
@@ -164,4 +174,4 @@ async function getCar(carId, userId) {
     }
 }
 
-module.exports = { fetchUser, saveUser, getUserandCars, getCar };
+module.exports = { fetchUser, saveUser, hashPassword, getUserandCars, getCar };
