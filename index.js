@@ -346,9 +346,6 @@ app.post('/ai_processor', async (req, res) => {
   res.end(JSON.stringify({ gpt_response: gpt_output }));
 });
 
-module.exports = app;
-// export default {app};
-
 app.listen(PORT, HOST, () => {
   console.log(`Server listening at http://${HOST}:${PORT}`);
 });
