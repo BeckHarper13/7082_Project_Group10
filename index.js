@@ -12,14 +12,10 @@ const openai = new openai_api({
   apiKey: process.env.OPENAI_API_KEY,
 });
 const session = require('express-session');
-
-
-const fetchsuser = require('./FetchUserInfo');
+const userInfoHandler = require('./FetchUserInfo');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'public/html'));
-
-
 
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key',
@@ -40,13 +36,9 @@ function ensureLoggedIn(req, res, next) {
 }
 
 // index.js - Simple Node.js HTTP server
-
 app.use(express.static(path.join(__dirname, 'public')));
-
 app.use(express.urlencoded({ extended: true }));
-
 app.use(express.json());
-
 
 const HOST = process.env.HOST || 'localhost';
 const PORT = parseInt(process.env.PORT || '3000', 10);
@@ -70,7 +62,7 @@ app.get('/login', (req, res) => {
 app.get('/home', ensureLoggedIn, (req, res) => {
   console.log('Fetching account for username: ', req.session && req.session.username);
 
-  fetchsuser.getUserandCars(req.session.username)
+  userInfoHandler.getUserandCars(req.session.username)
     .then(data => {
       res.render('home', {
         username: data.user.username,
@@ -86,7 +78,7 @@ app.get('/home', ensureLoggedIn, (req, res) => {
 app.get('/account', ensureLoggedIn, (req, res) => {
   console.log('Fetching account for username: ', req.session && req.session.username);
 
-  fetchsuser.getUserandCars(req.session.username)
+  userInfoHandler.getUserandCars(req.session.username)
     .then(data => {
       res.render('account', {
         username: data.user.username,
@@ -211,10 +203,10 @@ app.post('/car/:carId/note', ensureLoggedIn, async (req, res) => {
 });
 
 app.post('/signup', async (req, res) => {
-
   const { username, email, password } = req.body;
+  let passwordHash;
   try {
-    passwordHash = await fetchsuser.hashPassword(password);
+    passwordHash = await userInfoHandler.hashPassword(password);
     if (passwordHash === null) {
       return res.status(400).send("Password must be at least 4 characters");
     }
@@ -223,13 +215,13 @@ app.post('/signup', async (req, res) => {
     return res.status(500).send("Internal server error");
   }
 
-  fetchsuser.saveUser(req, username, email, passwordHash, res);
+  userInfoHandler.saveUser(req, username, email, passwordHash, res);
 
 })
 
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
-  fetchsuser.fetchUser(req, email, password, res);
+  userInfoHandler.fetchUser(req, email, password, res);
 })
 
 // Proxy endpoint for CarQuery
@@ -335,7 +327,6 @@ app.post('/ai_processor', async (req, res) => {
     model: "gpt-5-nano",
     input: prompt,
     store: true,
-    // max_output_tokens: 300,
   });
   let gpt_output = response.output_text;
   res.writeHead(200, { "Content-Type": "application/json" });

@@ -6,7 +6,7 @@ const isValidEmail = (email) => {
     return typeof email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 };
 
-// Comparing
+// Comparing entered password with password in db
 const checkPassword = async (plainPassword, hash) => {
     return await bcrypt.compare(plainPassword, hash);
 };
